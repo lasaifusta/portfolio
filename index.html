@@ -1,0 +1,878 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#0b1117" />
+    <meta name="description" content="Eneko Navarrete — desarrollador web especializado en aplicaciones técnicas a medida: calculadoras, configuradores y visualizadores 3D." />
+    <meta name="author" content="Eneko Navarrete" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <link rel="apple-touch-icon" href="favicon.svg" />
+    <link rel="mask-icon" href="favicon.svg" color="#22d3a0" />
+
+    <!-- Open Graph (LinkedIn, Facebook, WhatsApp) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Eneko Navarrete — Aplicaciones web técnicas a medida" />
+    <meta property="og:description" content="Calculadoras, configuradores y visualizadores 3D para negocios técnicos. Caso de estudio: Domitos, calculadora de domos geodésicos." />
+    <meta property="og:image" content="screenshots/editor-3d.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content="es_ES" />
+    <meta property="og:site_name" content="Eneko Navarrete" />
+
+    <!-- Twitter / X card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Eneko Navarrete — Aplicaciones web técnicas a medida" />
+    <meta name="twitter:description" content="Calculadoras, configuradores y visualizadores 3D para negocios técnicos." />
+    <meta name="twitter:image" content="screenshots/editor-3d.png" />
+
+    <title>Eneko Navarrete — Aplicaciones web técnicas a medida</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        --bg: #0b1117;
+        --bg-soft: #0f1620;
+        --bg-card: #121a24;
+        --border: #1f2a38;
+        --border-soft: #18222e;
+        --text: #e6edf6;
+        --text-dim: #94a3b8;
+        --text-muted: #64748b;
+        --accent: #22d3a0;
+        --accent-2: #38bdf8;
+        --accent-soft: rgba(34, 211, 160, 0.12);
+        --radius: 14px;
+        --radius-lg: 22px;
+        --shadow-soft: 0 1px 0 rgba(255, 255, 255, 0.03) inset, 0 8px 30px rgba(0, 0, 0, 0.25);
+        --max: 1180px;
+        --gutter: clamp(20px, 4vw, 40px);
+        --font: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+      }
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      body {
+        margin: 0; background: var(--bg); color: var(--text);
+        font-family: var(--font); font-size: 16px; line-height: 1.6;
+        -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+        overflow-x: hidden;
+      }
+      img, svg { display: block; max-width: 100%; }
+      a { color: inherit; text-decoration: none; }
+      button { font-family: inherit; cursor: pointer; }
+
+      .bg-grid {
+        position: fixed; inset: 0; z-index: -2;
+        background:
+          radial-gradient(1200px 600px at 80% -10%, rgba(56, 189, 248, 0.10), transparent 60%),
+          radial-gradient(900px 500px at -10% 20%, rgba(34, 211, 160, 0.08), transparent 65%),
+          linear-gradient(180deg, #0b1117 0%, #0a1019 100%);
+      }
+      .bg-grid::before {
+        content: ""; position: absolute; inset: 0;
+        background-image:
+          linear-gradient(rgba(148, 163, 184, 0.05) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(148, 163, 184, 0.05) 1px, transparent 1px);
+        background-size: 56px 56px;
+        mask-image: radial-gradient(ellipse at 50% 0%, #000 30%, transparent 75%);
+      }
+
+      .nav-wrap {
+        position: sticky; top: 0; z-index: 50;
+        backdrop-filter: blur(14px);
+        background: rgba(11, 17, 23, 0.72);
+        border-bottom: 1px solid transparent;
+        transition: border-color 0.25s ease, background 0.25s ease;
+      }
+      .nav-wrap.scrolled { border-bottom-color: var(--border-soft); background: rgba(11, 17, 23, 0.88); }
+      .nav { max-width: var(--max); margin: 0 auto; padding: 14px var(--gutter); display: flex; align-items: center; gap: 24px; }
+      .brand { display: inline-flex; align-items: center; gap: 10px; font-weight: 700; letter-spacing: -0.01em; }
+      .brand-mark {
+        width: 30px; height: 30px; display: grid; place-items: center;
+        border-radius: 8px;
+        background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
+        color: #061318; font-family: var(--mono); font-weight: 700;
+        box-shadow: 0 0 0 1px rgba(34, 211, 160, 0.35), 0 6px 24px rgba(34, 211, 160, 0.25);
+      }
+      .brand-name { font-size: 15px; }
+      .brand-name span { color: var(--text-dim); font-weight: 500; }
+      .nav-links { display: flex; gap: 26px; margin-left: 18px; }
+      .nav-links a { color: var(--text-dim); font-size: 14px; font-weight: 500; transition: color 0.2s ease; }
+      .nav-links a:hover { color: var(--text); }
+      .nav-right { margin-left: auto; display: flex; align-items: center; gap: 12px; }
+
+      .lang { display: inline-flex; background: var(--bg-card); border: 1px solid var(--border); border-radius: 999px; padding: 4px; font-family: var(--mono); }
+      .lang button {
+        appearance: none; background: transparent; border: 0;
+        color: var(--text-dim); font-size: 12px; font-weight: 600;
+        padding: 6px 11px; border-radius: 999px; letter-spacing: 0.04em;
+        transition: color 0.2s ease, background 0.2s ease;
+      }
+      .lang button:hover { color: var(--text); }
+      .lang button.active {
+        background: linear-gradient(135deg, rgba(34, 211, 160, 0.18), rgba(56, 189, 248, 0.18));
+        color: var(--text); box-shadow: inset 0 0 0 1px rgba(34, 211, 160, 0.35);
+      }
+
+      .cta {
+        display: inline-flex; align-items: center; gap: 8px;
+        background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
+        color: #061318; font-weight: 700; font-size: 14px;
+        padding: 10px 18px; border-radius: 999px; border: 0;
+        transition: transform 0.15s ease, box-shadow 0.25s ease, filter 0.2s ease;
+        box-shadow: 0 6px 24px rgba(34, 211, 160, 0.25);
+      }
+      .cta:hover { transform: translateY(-1px); filter: brightness(1.05); box-shadow: 0 10px 36px rgba(34, 211, 160, 0.32); }
+      .cta-ghost {
+        display: inline-flex; align-items: center; gap: 8px;
+        background: transparent; color: var(--text); font-weight: 600; font-size: 14px;
+        padding: 10px 18px; border-radius: 999px; border: 1px solid var(--border);
+        transition: border-color 0.2s ease, background 0.2s ease;
+      }
+      .cta-ghost:hover { border-color: var(--accent); background: var(--accent-soft); }
+
+      section { padding: clamp(80px, 10vw, 140px) var(--gutter); }
+      .container { max-width: var(--max); margin: 0 auto; }
+
+      .hero { padding-top: clamp(60px, 8vw, 110px); padding-bottom: clamp(60px, 8vw, 110px); position: relative; }
+      .eyebrow {
+        display: inline-flex; align-items: center; gap: 8px;
+        font-family: var(--mono); font-size: 12px; font-weight: 600;
+        letter-spacing: 0.08em; text-transform: uppercase;
+        color: var(--accent); padding: 6px 12px;
+        background: var(--accent-soft); border: 1px solid rgba(34, 211, 160, 0.22); border-radius: 999px;
+      }
+      .eyebrow .dot {
+        width: 6px; height: 6px; border-radius: 50%;
+        background: var(--accent); box-shadow: 0 0 0 4px rgba(34, 211, 160, 0.18);
+        animation: pulse 2.4s ease-in-out infinite;
+      }
+      @keyframes pulse {
+        0%, 100% { box-shadow: 0 0 0 4px rgba(34, 211, 160, 0.18); }
+        50% { box-shadow: 0 0 0 8px rgba(34, 211, 160, 0.05); }
+      }
+      h1.hero-title { font-size: clamp(40px, 6.4vw, 76px); line-height: 1.05; letter-spacing: -0.03em; font-weight: 800; margin: 22px 0 18px; max-width: 16ch; }
+      h1.hero-title em { font-style: normal; background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+      .hero-sub { font-size: clamp(17px, 1.8vw, 20px); color: var(--text-dim); max-width: 60ch; line-height: 1.55; margin-bottom: 36px; }
+      .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+      .hero-stats { margin-top: 64px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; border-top: 1px solid var(--border-soft); padding-top: 28px; }
+      .stat .num { font-family: var(--mono); font-size: clamp(22px, 2.4vw, 30px); font-weight: 700; color: var(--text); letter-spacing: -0.02em; }
+      .stat .num small { color: var(--accent); font-size: 0.7em; margin-left: 2px; }
+      .stat .lbl { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
+
+      .section-head { max-width: 720px; margin-bottom: 56px; }
+      .section-head .eyebrow { margin-bottom: 18px; }
+      .section-head h2 { font-size: clamp(30px, 4vw, 46px); line-height: 1.1; letter-spacing: -0.02em; font-weight: 700; margin: 0 0 16px; }
+      .section-head p { font-size: clamp(16px, 1.4vw, 18px); color: var(--text-dim); margin: 0; }
+
+      .about-grid { display: grid; grid-template-columns: 1.05fr 1fr; gap: 56px; align-items: center; }
+      .about-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 28px; box-shadow: var(--shadow-soft); }
+      .about-card h3 { margin: 0 0 14px; font-size: 18px; letter-spacing: -0.01em; }
+      .about-card p { color: var(--text-dim); margin: 0 0 16px; font-size: 15px; }
+      .skills { display: flex; flex-wrap: wrap; gap: 8px; }
+      .chip { font-family: var(--mono); font-size: 12px; font-weight: 500; padding: 6px 12px; border-radius: 999px; background: rgba(56, 189, 248, 0.08); color: var(--accent-2); border: 1px solid rgba(56, 189, 248, 0.2); }
+      .chip.green { background: rgba(34, 211, 160, 0.08); color: var(--accent); border-color: rgba(34, 211, 160, 0.22); }
+
+      .portrait-wrap { position: relative; display: flex; flex-direction: column; align-items: center; gap: 18px; }
+      .portrait { position: relative; width: 100%; max-width: 340px; aspect-ratio: 1 / 1; border-radius: 24px; overflow: hidden; background: var(--bg-card); border: 1px solid var(--border); box-shadow: var(--shadow-soft); }
+      .portrait::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 55%, rgba(11, 17, 23, 0.55) 100%); pointer-events: none; }
+      .portrait img { width: 100%; height: 100%; object-fit: cover; filter: saturate(0.95) contrast(1.02); }
+      .portrait-badge {
+        position: absolute; bottom: 14px; left: 14px; right: 14px;
+        display: flex; align-items: center; gap: 10px;
+        font-family: var(--mono); font-size: 12px; color: var(--text);
+        background: rgba(11, 17, 23, 0.7); backdrop-filter: blur(8px);
+        border: 1px solid var(--border-soft); border-radius: 10px; padding: 8px 12px; z-index: 1;
+      }
+      .portrait-badge .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 4px rgba(34, 211, 160, 0.18); animation: pulse 2.4s ease-in-out infinite; flex-shrink: 0; }
+      .portrait-meta { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; width: 100%; max-width: 340px; }
+      .portrait-meta .item { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 10px 14px; }
+      .portrait-meta .k { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); }
+      .portrait-meta .v { font-size: 14px; color: var(--text); margin-top: 2px; }
+
+      .gallery { background: linear-gradient(180deg, #0b1218 0%, #0c1419 100%); border-bottom: 1px solid var(--border-soft); }
+      .gallery-grid { display: grid; grid-template-columns: 1.6fr 1fr; grid-template-rows: 1fr 1fr; gap: 18px; }
+      .shot { position: relative; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow-soft); transition: transform 0.3s ease, border-color 0.3s ease; }
+      .shot:hover { transform: translateY(-3px); border-color: rgba(34, 211, 160, 0.32); }
+      .shot.hero-shot { grid-row: span 2; }
+      .shot img { width: 100%; height: 100%; object-fit: cover; display: block; background: #0b1117; }
+      .shot.hero-shot img { aspect-ratio: 16 / 11; }
+      .shot:not(.hero-shot) img { aspect-ratio: 16 / 10; }
+      .shot-caption { position: absolute; left: 12px; bottom: 12px; right: 12px; display: flex; justify-content: space-between; align-items: center; gap: 10px; background: rgba(11, 17, 23, 0.72); backdrop-filter: blur(8px); border: 1px solid var(--border-soft); border-radius: 8px; padding: 7px 11px; font-size: 12px; color: var(--text); }
+      .shot-caption .tag { font-family: var(--mono); font-size: 10.5px; color: var(--accent); text-transform: uppercase; letter-spacing: 0.06em; }
+
+      .case { background: linear-gradient(180deg, #0d1620 0%, #0c1419 100%); border-top: 1px solid var(--border-soft); border-bottom: 1px solid var(--border-soft); position: relative; }
+      .case::before { content: ""; position: absolute; top: 0; left: 50%; width: 600px; height: 600px; transform: translateX(-50%); background: radial-gradient(circle, rgba(34, 211, 160, 0.10) 0%, transparent 60%); pointer-events: none; }
+      .case-hero { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; margin-bottom: 64px; }
+      .case-tag { display: inline-flex; gap: 8px; font-family: var(--mono); font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-2); margin-bottom: 18px; }
+      .case-hero h2 { font-size: clamp(28px, 3.6vw, 42px); font-weight: 700; line-height: 1.1; letter-spacing: -0.02em; margin: 0 0 18px; }
+      .case-hero p { color: var(--text-dim); font-size: 17px; margin: 0 0 14px; }
+
+      .dome-viewport { position: relative; background: #0a131c; border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-soft), 0 0 60px rgba(34, 211, 160, 0.06); aspect-ratio: 16 / 10; }
+      .dome-shot { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; }
+      .dome-viewport::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(11, 17, 23, 0.45) 0%, transparent 18%, transparent 100%); pointer-events: none; }
+      .dome-chrome { position: absolute; top: 12px; left: 12px; right: 12px; display: flex; justify-content: space-between; align-items: center; pointer-events: none; z-index: 2; }
+      .dome-dots { display: flex; gap: 6px; }
+      .dome-dots span { width: 10px; height: 10px; border-radius: 50%; background: #1e2a38; }
+      .dome-dots span:nth-child(1) { background: #f97171; }
+      .dome-dots span:nth-child(2) { background: #fbbf24; }
+      .dome-dots span:nth-child(3) { background: #22d3a0; }
+      .dome-label { font-family: var(--mono); font-size: 11px; color: var(--text-muted); background: rgba(11, 17, 23, 0.6); backdrop-filter: blur(6px); padding: 4px 9px; border-radius: 6px; border: 1px solid var(--border-soft); }
+
+      .case-feats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-bottom: 64px; }
+      .feat { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 22px; transition: border-color 0.25s ease, transform 0.25s ease; }
+      .feat:hover { border-color: rgba(34, 211, 160, 0.35); transform: translateY(-2px); }
+      .feat-icon { width: 36px; height: 36px; display: grid; place-items: center; background: var(--accent-soft); border: 1px solid rgba(34, 211, 160, 0.22); border-radius: 10px; color: var(--accent); margin-bottom: 14px; }
+      .feat h4 { margin: 0 0 6px; font-size: 15px; }
+      .feat p { margin: 0; font-size: 13.5px; color: var(--text-dim); line-height: 1.55; }
+
+      .case-pillars { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-bottom: 48px; }
+      .pillar { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; }
+      .pillar h4 { font-family: var(--mono); font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin: 0 0 14px; }
+      .pillar ul { margin: 0; padding: 0; list-style: none; }
+      .pillar li { font-size: 14px; color: var(--text-dim); padding: 8px 0; border-bottom: 1px dashed var(--border-soft); display: flex; gap: 10px; align-items: flex-start; }
+      .pillar li:last-child { border-bottom: 0; }
+      .pillar li::before { content: "▸"; color: var(--accent); flex-shrink: 0; margin-top: 1px; }
+      .case-tech { display: flex; flex-wrap: wrap; gap: 8px; padding: 20px 0 0; }
+      .case-tech .chip { font-size: 12.5px; }
+
+      .services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+      .service { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 28px; position: relative; overflow: hidden; transition: transform 0.3s ease, border-color 0.3s ease; }
+      .service:hover { transform: translateY(-4px); border-color: rgba(56, 189, 248, 0.3); }
+      .service::after { content: ""; position: absolute; inset: -1px; background: linear-gradient(135deg, transparent 60%, rgba(34, 211, 160, 0.16) 100%); opacity: 0; transition: opacity 0.3s ease; pointer-events: none; border-radius: var(--radius-lg); }
+      .service:hover::after { opacity: 1; }
+      .service-icon { width: 44px; height: 44px; background: linear-gradient(135deg, rgba(34, 211, 160, 0.18), rgba(56, 189, 248, 0.18)); border: 1px solid rgba(34, 211, 160, 0.25); border-radius: 12px; display: grid; place-items: center; margin-bottom: 18px; color: var(--accent); }
+      .service h3 { margin: 0 0 8px; font-size: 18px; letter-spacing: -0.01em; }
+      .service p { margin: 0; color: var(--text-dim); font-size: 14.5px; line-height: 1.6; }
+
+      .process { background: linear-gradient(180deg, #0c1419 0%, #0b1117 100%); border-top: 1px solid var(--border-soft); border-bottom: 1px solid var(--border-soft); }
+      .process-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; position: relative; }
+      .process-grid::before { content: ""; position: absolute; top: 38px; left: 8%; right: 8%; height: 1px; background: linear-gradient(90deg, transparent, var(--border) 12%, var(--border) 88%, transparent); z-index: 0; }
+      .step { position: relative; z-index: 1; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 24px; display: flex; flex-direction: column; gap: 12px; transition: transform 0.3s ease, border-color 0.3s ease; }
+      .step:hover { transform: translateY(-3px); border-color: rgba(34, 211, 160, 0.35); }
+      .step-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+      .step-num { font-family: var(--mono); font-size: 13px; font-weight: 700; color: #061318; background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%); padding: 6px 12px; border-radius: 999px; letter-spacing: 0.04em; }
+      .step-time { font-family: var(--mono); font-size: 11px; font-weight: 600; color: var(--accent); background: var(--accent-soft); border: 1px solid rgba(34, 211, 160, 0.22); padding: 4px 10px; border-radius: 999px; letter-spacing: 0.04em; }
+      .step h3 { margin: 0; font-size: 17px; letter-spacing: -0.01em; line-height: 1.25; }
+      .step p { margin: 0; color: var(--text-dim); font-size: 14px; line-height: 1.6; flex-grow: 1; }
+      .step-deliv { margin-top: 4px; padding-top: 14px; border-top: 1px dashed var(--border-soft); display: flex; gap: 8px; align-items: flex-start; font-size: 12.5px; color: var(--text-muted); line-height: 1.5; }
+      .step-deliv::before { content: "↳"; color: var(--accent); font-weight: 700; flex-shrink: 0; }
+      .step-deliv span { color: var(--text-dim); }
+
+      .reasons { display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px; }
+      .reason { display: flex; gap: 18px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 26px; align-items: flex-start; }
+      .reason-num { flex-shrink: 0; width: 44px; height: 44px; font-family: var(--mono); font-weight: 700; font-size: 17px; display: grid; place-items: center; background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%); color: #061318; border-radius: 12px; }
+      .reason h3 { margin: 0 0 8px; font-size: 17px; letter-spacing: -0.01em; }
+      .reason p { margin: 0; color: var(--text-dim); font-size: 14.5px; line-height: 1.6; }
+
+      .contact { text-align: center; position: relative; }
+      .contact::before { content: ""; position: absolute; inset: auto 10% 10% 10%; height: 400px; background: radial-gradient(ellipse at center, rgba(34, 211, 160, 0.15) 0%, transparent 60%); z-index: -1; filter: blur(40px); }
+      .contact h2 { font-size: clamp(34px, 5vw, 56px); font-weight: 800; letter-spacing: -0.03em; margin: 0 0 18px; line-height: 1.1; }
+      .contact h2 em { font-style: normal; background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+      .contact p { font-size: 18px; color: var(--text-dim); max-width: 56ch; margin: 0 auto 36px; }
+      .contact-actions { display: inline-flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
+      .contact-email { margin-top: 28px; font-family: var(--mono); font-size: 14px; color: var(--text-dim); }
+      .contact-email a { color: var(--text); border-bottom: 1px dashed var(--accent); padding-bottom: 1px; }
+
+      footer { border-top: 1px solid var(--border-soft); padding: 30px var(--gutter); background: var(--bg-soft); }
+      .foot { max-width: var(--max); margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; font-size: 13px; color: var(--text-muted); }
+      .foot .brand { font-size: 13px; }
+
+      .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+      .reveal.is-visible { opacity: 1; transform: translateY(0); }
+      .reveal.delay-1 { transition-delay: 0.08s; }
+      .reveal.delay-2 { transition-delay: 0.16s; }
+      .reveal.delay-3 { transition-delay: 0.24s; }
+      .reveal.delay-4 { transition-delay: 0.32s; }
+
+      @media (prefers-reduced-motion: reduce) {
+        .reveal { opacity: 1; transform: none; transition: none; }
+        .eyebrow .dot { animation: none; }
+        html { scroll-behavior: auto; }
+      }
+
+      @media (max-width: 920px) {
+        .about-grid { grid-template-columns: 1fr; gap: 36px; }
+        .case-hero { grid-template-columns: 1fr; gap: 36px; }
+        .case-feats { grid-template-columns: 1fr; }
+        .case-pillars { grid-template-columns: 1fr; }
+        .services-grid { grid-template-columns: 1fr; }
+        .reasons { grid-template-columns: 1fr; }
+        .hero-stats { grid-template-columns: repeat(2, 1fr); }
+        .nav-links { display: none; }
+        .gallery-grid { grid-template-columns: 1fr; grid-template-rows: auto; }
+        .shot.hero-shot { grid-row: auto; }
+        .process-grid { grid-template-columns: repeat(2, 1fr); }
+        .process-grid::before { display: none; }
+      }
+      @media (max-width: 520px) {
+        .hero-stats { grid-template-columns: 1fr 1fr; gap: 16px; }
+        .nav { gap: 12px; }
+        .brand-name span { display: none; }
+        .cta, .cta-ghost { padding: 9px 14px; font-size: 13px; }
+        .lang button { padding: 5px 8px; font-size: 11px; }
+        .process-grid { grid-template-columns: 1fr; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="bg-grid" aria-hidden="true"></div>
+
+    <header class="nav-wrap" id="nav">
+      <nav class="nav">
+        <a href="#hero" class="brand" aria-label="Eneko Navarrete">
+          <span class="brand-mark" aria-hidden="true">EN</span>
+          <span class="brand-name">Eneko Navarrete <span data-i18n="brand.role">· Desarrollo web</span></span>
+        </a>
+        <div class="nav-links">
+          <a href="#about" data-i18n="nav.about">Sobre mí</a>
+          <a href="#case" data-i18n="nav.case">Caso de estudio</a>
+          <a href="#services" data-i18n="nav.services">Servicios</a>
+          <a href="#process" data-i18n="nav.process">Proceso</a>
+          <a href="#why" data-i18n="nav.why">Por qué yo</a>
+        </div>
+        <div class="nav-right">
+          <div class="lang" role="tablist" aria-label="Idioma / Llengua / Language">
+            <button data-lang="es" class="active" type="button" role="tab" aria-selected="true">ES</button>
+            <button data-lang="ca" type="button" role="tab" aria-selected="false">CA</button>
+            <button data-lang="en" type="button" role="tab" aria-selected="false">EN</button>
+          </div>
+          <a href="#contact" class="cta" data-i18n="nav.cta">Hablemos</a>
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero container" id="hero">
+        <div class="reveal">
+          <span class="eyebrow"><span class="dot"></span><span data-i18n="hero.eyebrow">Desarrollador web · España</span></span>
+        </div>
+        <h1 class="hero-title reveal delay-1">
+          <span data-i18n="hero.title.a">Aplicaciones web</span>
+          <em data-i18n="hero.title.b">técnicas a medida</em>
+          <span data-i18n="hero.title.c">que tu negocio puede usar mañana.</span>
+        </h1>
+        <p class="hero-sub reveal delay-2" data-i18n="hero.sub">Construyo calculadoras, configuradores y visualizadores 3D para empresas que necesitan algo más que una web bonita: lógica real, cálculo riguroso, exportaciones útiles y una interfaz en la que da gusto trabajar.</p>
+        <div class="hero-actions reveal delay-3">
+          <a href="#contact" class="cta" data-i18n="hero.cta1">
+            <span>Empieza tu proyecto</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </a>
+          <a href="#case" class="cta-ghost" data-i18n="hero.cta2">Ver caso de estudio</a>
+        </div>
+        <div class="hero-stats reveal delay-4">
+          <div class="stat"><div class="num">v1.0<small>·</small></div><div class="lbl" data-i18n="hero.stat1">producto en producción</div></div>
+          <div class="stat"><div class="num">100%</div><div class="lbl" data-i18n="hero.stat2">código tipado y testeado</div></div>
+          <div class="stat"><div class="num">3D</div><div class="lbl" data-i18n="hero.stat3">visualización en tiempo real</div></div>
+          <div class="stat"><div class="num">PWA</div><div class="lbl" data-i18n="hero.stat4">instalable y offline</div></div>
+        </div>
+      </section>
+
+      <section id="about" class="container">
+        <div class="section-head reveal">
+          <span class="eyebrow"><span data-i18n="about.eyebrow">Sobre mí</span></span>
+          <h2 data-i18n="about.title">Ingeniería de software aplicada a problemas reales de negocio.</h2>
+          <p data-i18n="about.lead">No hago plantillas ni landings genéricas. Diseño y construyo aplicaciones web donde la lógica importa: cálculos correctos, datos persistentes, exportaciones que un cliente final puede llevarse al taller o a la oficina.</p>
+        </div>
+        <div class="about-grid">
+          <div class="portrait-wrap reveal">
+            <div class="portrait">
+              <img src="screenshots/eneko.jpg" alt="Eneko Navarrete" loading="lazy" />
+              <div class="portrait-badge"><span class="dot"></span><span data-i18n="about.badge">Disponible para nuevos proyectos</span></div>
+            </div>
+            <div class="portrait-meta">
+              <div class="item"><div class="k" data-i18n="about.meta.k1">Base</div><div class="v" data-i18n="about.meta.v1">España · remoto</div></div>
+              <div class="item"><div class="k" data-i18n="about.meta.k2">Foco</div><div class="v" data-i18n="about.meta.v2">Web técnica a medida</div></div>
+              <div class="item"><div class="k" data-i18n="about.meta.k3">Idiomas</div><div class="v" data-i18n="about.meta.v3">ES · CA · EN</div></div>
+              <div class="item"><div class="k" data-i18n="about.meta.k4">Respuesta</div><div class="v" data-i18n="about.meta.v4">&lt; 48 h</div></div>
+            </div>
+          </div>
+          <div class="reveal delay-1">
+            <p style="color:var(--text-dim); font-size:17px; line-height:1.7;" data-i18n="about.p1">Soy Eneko Navarrete. Diseño y construyo aplicaciones web a medida para clientes que tienen un problema técnico concreto y necesitan una herramienta hecha para su caso — no un SaaS genérico que solo cubre el 60%. Mi enfoque combina ingeniería rigurosa (TypeScript estricto, tests, CI/CD), una UX cuidada y entregas rápidas en iteraciones cortas.</p>
+            <p style="color:var(--text-dim); font-size:17px; line-height:1.7;" data-i18n="about.p2">Cada proyecto se trata como software de producto: documentación viva, tests automatizados, despliegue continuo y un código que el cliente puede auditar o ampliar más adelante. Trabajo de cerca, sin agencias por medio, y la siguiente decisión técnica siempre queda explicada en lenguaje de negocio.</p>
+            <div class="about-card" style="margin-top: 24px;">
+              <h3 data-i18n="about.stack.title">Stack y especialidades</h3>
+              <p data-i18n="about.stack.lead">Herramientas que uso a diario para entregar producto, no demos.</p>
+              <div class="skills">
+                <span class="chip green">TypeScript</span><span class="chip green">React 18</span><span class="chip">Three.js / r3f</span><span class="chip">Vite</span><span class="chip">Tailwind</span><span class="chip">Zustand</span><span class="chip green">Supabase</span><span class="chip">Stripe</span><span class="chip">Playwright</span><span class="chip">Vitest</span><span class="chip green">PWA</span><span class="chip">Cloudflare</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="case" id="case">
+        <div class="container">
+          <div class="section-head reveal">
+            <span class="eyebrow"><span data-i18n="case.eyebrow">Caso de estudio principal</span></span>
+            <h2 data-i18n="case.title">Domitos — Calculadora de domos geodésicos</h2>
+            <p data-i18n="case.lead">Un configurador-calculadora web completo para diseñar, presupuestar y construir domos geodésicos. Sustituye una hoja de cálculo legacy y una sesión de CAD por un flujo en el navegador, con 3D en tiempo real, planos PDF y BOM exportable.</p>
+          </div>
+          <div class="case-hero">
+            <div class="reveal">
+              <div class="case-tag" data-i18n="case.tag">PROYECTO INSIGNIA · 2025–2026</div>
+              <h2 data-i18n="case.h2">De hoja de cálculo legacy a SaaS productivo.</h2>
+              <p data-i18n="case.p1">Domitos parte del prototipo Acidome (HTML autocontenido) y lo convierte en una aplicación moderna construida con Vite, React 18, TypeScript estricto y react-three-fiber. El motor matemático vive en código puro y testeado: icosaedros, octaedros y tetraedros con subdivisión geodésica V1 a V6, proyección a esfera y cortes por porción (1/4, 5/12, 7/12, 3/4).</p>
+              <p data-i18n="case.p2">La aplicación calcula la lista de barras clasificadas por longitud con tolerancia ±0.5&nbsp;mm, los ángulos de corte compuestos para conexiones Good Karma, la cubierta en m², los herrajes y el coste total — todo recalculado en menos de 200&nbsp;ms mientras el usuario manipula la escena 3D.</p>
+              <div class="case-tech">
+                <span class="chip green">Vite 5</span><span class="chip green">React 18</span><span class="chip green">TypeScript strict</span><span class="chip">Three.js + r3f</span><span class="chip">Tailwind</span><span class="chip">Zustand</span><span class="chip">Supabase</span><span class="chip">Stripe</span><span class="chip">Vitest</span><span class="chip">Playwright</span><span class="chip">jsPDF</span><span class="chip">SheetJS</span><span class="chip">Cloudflare Pages</span>
+              </div>
+            </div>
+            <div class="dome-viewport reveal delay-1" aria-label="Captura del editor 3D de Domitos">
+              <div class="dome-chrome">
+                <div class="dome-dots"><span></span><span></span><span></span></div>
+                <div class="dome-label">domitos.app · /editor</div>
+              </div>
+              <img src="screenshots/editor-3d.png" alt="Editor 3D de Domitos con visualización del domo y barras clasificadas por color" loading="lazy" class="dome-shot" />
+            </div>
+          </div>
+
+          <div class="case-pillars">
+            <div class="pillar reveal">
+              <h4 data-i18n="case.prob.title">El problema</h4>
+              <ul>
+                <li data-i18n="case.prob.1">Hojas de cálculo frágiles donde un error rompe todos los presupuestos.</li>
+                <li data-i18n="case.prob.2">Sin previsualización 3D: imposible enseñar el resultado al cliente.</li>
+                <li data-i18n="case.prob.3">Cortes y biseles calculados a mano, propensos a fallo.</li>
+                <li data-i18n="case.prob.4">Sin reutilización de plantillas entre proyectos.</li>
+              </ul>
+            </div>
+            <div class="pillar reveal delay-1">
+              <h4 data-i18n="case.sol.title">La solución</h4>
+              <ul>
+                <li data-i18n="case.sol.1">Motor matemático puro con tests de paridad contra el legacy.</li>
+                <li data-i18n="case.sol.2">Visor 3D interactivo con r3f: cámara, capas, modo explosionado.</li>
+                <li data-i18n="case.sol.3">Cortes, biseles y ángulos compuestos calculados al instante.</li>
+                <li data-i18n="case.sol.4">SaaS multiusuario con auth, planes y proyectos persistentes.</li>
+              </ul>
+            </div>
+            <div class="pillar reveal delay-2">
+              <h4 data-i18n="case.res.title">El resultado</h4>
+              <ul>
+                <li data-i18n="case.res.1">App PWA instalable, modo offline y rendimiento &lt;200&nbsp;ms.</li>
+                <li data-i18n="case.res.2">Exportación a PDF, XLSX, CSV, OBJ y DXF en un clic.</li>
+                <li data-i18n="case.res.3">Despliegue continuo en Cloudflare con cada push a main.</li>
+                <li data-i18n="case.res.4">+34 tests unitarios, e2e Playwright y auditoría a11y en verde.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="case-feats">
+            <div class="feat reveal">
+              <div class="feat-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2"/><line x1="12" y1="22" x2="12" y2="11"/><polyline points="22 8.5 12 11 2 8.5"/></svg></div>
+              <h4 data-i18n="case.feat1.t">Motor geodésico V1–V6</h4>
+              <p data-i18n="case.feat1.p">Icosaedro, octaedro y tetraedro con subdivisión hasta V6, proyección a esfera y porciones configurables.</p>
+            </div>
+            <div class="feat reveal delay-1">
+              <div class="feat-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/></svg></div>
+              <h4 data-i18n="case.feat2.t">Cortes Good Karma</h4>
+              <p data-i18n="case.feat2.p">Ángulos compuestos de sierra ingletadora, biseles y longitudes reales tras conexión, listos para taller.</p>
+            </div>
+            <div class="feat reveal delay-2">
+              <div class="feat-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3h18v18H3z"/><path d="M3 9h18"/><path d="M9 21V9"/></svg></div>
+              <h4 data-i18n="case.feat3.t">Visor 3D interactivo</h4>
+              <p data-i18n="case.feat3.p">Cámara orbital, selección de barras, capas, materiales de madera y modo explosionado con un slider.</p>
+            </div>
+            <div class="feat reveal delay-3">
+              <div class="feat-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+              <h4 data-i18n="case.feat4.t">Planos PDF + BOM</h4>
+              <p data-i18n="case.feat4.p">Plano de despiece con bin-packing 1D, BOM editable con precios y exportación XLSX en 4 hojas.</p>
+            </div>
+            <div class="feat reveal delay-1">
+              <div class="feat-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+              <h4 data-i18n="case.feat5.t">Plantillas listas</h4>
+              <p data-i18n="case.feat5.p">Glamping, invernadero, evento, mini-domo. Punto de partida en un clic.</p>
+            </div>
+            <div class="feat reveal delay-2">
+              <div class="feat-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div>
+              <h4 data-i18n="case.feat6.t">SaaS multiusuario</h4>
+              <p data-i18n="case.feat6.p">Cuentas, proyectos persistidos, 4 tramos de suscripción y pago con Stripe.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="gallery" id="gallery">
+        <div class="container">
+          <div class="section-head reveal">
+            <span class="eyebrow"><span data-i18n="gallery.eyebrow">Domitos · capturas reales</span></span>
+            <h2 data-i18n="gallery.title">La app por dentro: 3D, BOM, despiece y diagrama de corte.</h2>
+            <p data-i18n="gallery.lead">No son mockups: son pantallas reales de Domitos en funcionamiento. Cada exportación está pensada para que el resultado pueda llevarse al taller sin pasar antes por un CAD.</p>
+          </div>
+          <div class="gallery-grid">
+            <figure class="shot hero-shot reveal">
+              <img src="screenshots/editor-3d.png" alt="Editor 3D de Domitos" loading="lazy" />
+              <figcaption class="shot-caption"><span data-i18n="gallery.s1">Editor 3D · clasificación de barras por color</span><span class="tag">/app</span></figcaption>
+            </figure>
+            <figure class="shot reveal delay-1">
+              <img src="screenshots/bom.png" alt="Panel BOM con barras, cubierta, herrajes y totales" loading="lazy" />
+              <figcaption class="shot-caption"><span data-i18n="gallery.s2">BOM editable + exportación XLSX</span><span class="tag">/bom</span></figcaption>
+            </figure>
+            <figure class="shot reveal delay-2">
+              <img src="screenshots/despiece.png" alt="Plano de despiece con bin-packing" loading="lazy" />
+              <figcaption class="shot-caption"><span data-i18n="gallery.s3">Plano de despiece · bin-packing 1D</span><span class="tag">/cut-plan</span></figcaption>
+            </figure>
+          </div>
+          <div class="gallery-grid reveal" style="grid-template-columns: 1fr; margin-top: 18px;">
+            <figure class="shot">
+              <img src="screenshots/diagrama-corte.png" alt="Diagrama de corte con ángulos y biseles" loading="lazy" style="aspect-ratio: 16 / 8;" />
+              <figcaption class="shot-caption"><span data-i18n="gallery.s4">Diagrama de corte · ángulos compuestos y biseles, listos para sierra ingletadora</span><span class="tag">/cuts</span></figcaption>
+            </figure>
+          </div>
+        </div>
+      </section>
+
+      <section id="services" class="container">
+        <div class="section-head reveal">
+          <span class="eyebrow"><span data-i18n="services.eyebrow">Qué puedo hacer por ti</span></span>
+          <h2 data-i18n="services.title">Software técnico que tu equipo y tus clientes van a usar de verdad.</h2>
+          <p data-i18n="services.lead">Estos son los productos en los que mejor entrego: lógica densa, datos persistentes, interfaces precisas y entregables que el cliente puede llevarse al mundo físico.</p>
+        </div>
+        <div class="services-grid">
+          <article class="service reveal">
+            <div class="service-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6v6H9z"/></svg></div>
+            <h3 data-i18n="services.s1.t">Aplicaciones de cálculo</h3>
+            <p data-i18n="services.s1.p">Calculadoras de ingeniería, costes, dimensionado o energía. Motor matemático testeado, fórmulas auditables y resultados en tiempo real.</p>
+          </article>
+          <article class="service reveal delay-1">
+            <div class="service-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+            <h3 data-i18n="services.s2.t">Herramientas de presupuesto</h3>
+            <p data-i18n="services.s2.p">Generadores de cotización con tarifas, descuentos, IVA y exportación a PDF/XLSX. Tu comercial cierra venta desde el móvil.</p>
+          </article>
+          <article class="service reveal delay-2">
+            <div class="service-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><circle cx="19" cy="5" r="2"/><circle cx="5" cy="19" r="2"/></svg></div>
+            <h3 data-i18n="services.s3.t">Configuradores de producto</h3>
+            <p data-i18n="services.s3.p">El cliente elige medidas, materiales y acabados; la app muestra el resultado, calcula precio y envía el pedido al ERP o por email.</p>
+          </article>
+          <article class="service reveal delay-1">
+            <div class="service-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l9 4.9V17L12 22 3 17V6.9z"/><path d="M3 7l9 5 9-5"/></svg></div>
+            <h3 data-i18n="services.s4.t">Visualizadores 3D técnicos</h3>
+            <p data-i18n="services.s4.p">Modelos paramétricos en navegador con Three.js: rotación, capas, mediciones, exportación a OBJ/DXF para el equipo de producción.</p>
+          </article>
+          <article class="service reveal delay-2">
+            <div class="service-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/></svg></div>
+            <h3 data-i18n="services.s5.t">Dashboards y back-office</h3>
+            <p data-i18n="services.s5.p">Paneles para operación: usuarios, métricas, facturación, auth con OAuth, planes y permisos. Hechos con Supabase y RLS desde el día uno.</p>
+          </article>
+          <article class="service reveal delay-3">
+            <div class="service-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg></div>
+            <h3 data-i18n="services.s6.t">PWA + despliegue continuo</h3>
+            <p data-i18n="services.s6.p">Apps instalables, modo offline, despliegue automático en Cloudflare o Vercel, dominio propio y SEO técnico cuidado.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="process" id="process">
+        <div class="container">
+          <div class="section-head reveal">
+            <span class="eyebrow"><span data-i18n="process.eyebrow">Cómo trabajo</span></span>
+            <h2 data-i18n="process.title">Un ritmo semanal claro, demos cada viernes y código auditable desde el primer commit.</h2>
+            <p data-i18n="process.lead">Sin agencias por medio. Sin meses de silencio. Cada semana hay algo que tocar y una decisión por tomar.</p>
+          </div>
+          <div class="process-grid">
+            <div class="step reveal">
+              <div class="step-top"><span class="step-num">01</span><span class="step-time" data-i18n="process.s1.time">30–45 min</span></div>
+              <h3 data-i18n="process.s1.t">Conversación inicial</h3>
+              <p data-i18n="process.s1.p">Me cuentas el problema y lo que has probado. Salimos con un mini-diagnóstico por escrito y una primera estimación de alcance.</p>
+              <div class="step-deliv"><span data-i18n="process.s1.d">Documento de una página con objetivo, riesgos y siguiente paso.</span></div>
+            </div>
+            <div class="step reveal delay-1">
+              <div class="step-top"><span class="step-num">02</span><span class="step-time" data-i18n="process.s2.time">3–5 días</span></div>
+              <h3 data-i18n="process.s2.t">Spec corta y propuesta</h3>
+              <p data-i18n="process.s2.p">Convierto la conversación en un documento técnico breve: qué se construye, qué no, cómo se mide el éxito, en cuántas iteraciones y a qué precio.</p>
+              <div class="step-deliv"><span data-i18n="process.s2.d">Spec + presupuesto cerrado por fases.</span></div>
+            </div>
+            <div class="step reveal delay-2">
+              <div class="step-top"><span class="step-num">03</span><span class="step-time" data-i18n="process.s3.time">Cada viernes</span></div>
+              <h3 data-i18n="process.s3.t">Iteraciones semanales con demo</h3>
+              <p data-i18n="process.s3.p">Cada lunes priorizamos juntos lo de la semana. El código está en tu GitHub desde el día uno. Sin sorpresas al final.</p>
+              <div class="step-deliv"><span data-i18n="process.s3.d">App desplegada cada semana en staging + nota de cambios.</span></div>
+            </div>
+            <div class="step reveal delay-3">
+              <div class="step-top"><span class="step-num">04</span><span class="step-time" data-i18n="process.s4.time">Producción</span></div>
+              <h3 data-i18n="process.s4.t">Lanzamiento y mantenimiento</h3>
+              <p data-i18n="process.s4.p">Despliegue a producción, dominio propio, métricas activas. Después puedes seguir con horas mensuales, evolutivos o llevarte el código y operar solo.</p>
+              <div class="step-deliv"><span data-i18n="process.s4.d">Handover técnico, runbook y métricas conectadas.</span></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="why" class="container">
+        <div class="section-head reveal">
+          <span class="eyebrow"><span data-i18n="why.eyebrow">Por qué contratarme</span></span>
+          <h2 data-i18n="why.title">No es una landing genérica. Tampoco un proyecto genérico.</h2>
+          <p data-i18n="why.lead">Trabajo con criterios que casi nadie aplica en proyectos a medida — pero que cambian completamente el resultado final.</p>
+        </div>
+        <div class="reasons">
+          <div class="reason reveal"><div class="reason-num">01</div><div><h3 data-i18n="why.r1.t">Tipado estricto y tests desde el día uno</h3><p data-i18n="why.r1.p">TypeScript en modo strict con noUncheckedIndexedAccess, tests unitarios para toda la lógica de negocio y e2e con Playwright. Cero any, cero sorpresas en producción.</p></div></div>
+          <div class="reason reveal delay-1"><div class="reason-num">02</div><div><h3 data-i18n="why.r2.t">Arquitectura limpia, no acoplada al framework</h3><p data-i18n="why.r2.p">El núcleo de cálculo y dominio vive separado de la UI. Si mañana cambia React por otra cosa, tu lógica de negocio sigue funcionando intacta.</p></div></div>
+          <div class="reason reveal delay-2"><div class="reason-num">03</div><div><h3 data-i18n="why.r3.t">Entrega continua y auditable</h3><p data-i18n="why.r3.p">GitHub Actions con lint, typecheck y tests en cada PR. Despliegue automático en cada push a main. Cada cambio queda registrado y reversible.</p></div></div>
+          <div class="reason reveal delay-3"><div class="reason-num">04</div><div><h3 data-i18n="why.r4.t">Comunicación directa, sin agencias</h3><p data-i18n="why.r4.p">Hablas conmigo, no con un comercial. Documentación viva, demos semanales y decisiones técnicas explicadas en lenguaje de negocio.</p></div></div>
+        </div>
+      </section>
+
+      <section id="contact" class="contact container">
+        <div class="reveal"><span class="eyebrow"><span data-i18n="contact.eyebrow">Hablemos de tu proyecto</span></span></div>
+        <h2 class="reveal delay-1"><span data-i18n="contact.title.a">¿Tienes un problema técnico</span> <em data-i18n="contact.title.b">que merece una herramienta a medida?</em></h2>
+        <p class="reveal delay-2" data-i18n="contact.lead">Cuéntame qué necesita tu equipo o tus clientes. En menos de 48 horas te respondo con un primer diagnóstico, una estimación de alcance y la siguiente decisión a tomar.</p>
+        <div class="contact-actions reveal delay-3">
+          <a href="mailto:lasaifusta@gmail.com?subject=Proyecto%20web%20a%20medida&body=Hola%20Eneko%2C%0A%0AMe%20gustar%C3%ADa%20contarte%20sobre%20un%20proyecto..." class="cta" data-i18n="contact.cta1">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            <span>Enviar email</span>
+          </a>
+          <a href="#case" class="cta-ghost" data-i18n="contact.cta2">Ver caso de estudio</a>
+        </div>
+        <div class="contact-email reveal delay-4"><span data-i18n="contact.email">o escríbeme directamente a</span> <a href="mailto:lasaifusta@gmail.com">lasaifusta@gmail.com</a></div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="foot">
+        <div class="brand"><span class="brand-mark" aria-hidden="true">EN</span><span class="brand-name">Eneko Navarrete</span></div>
+        <div><span data-i18n="footer.legal">© 2026 Eneko Navarrete · Desarrollo web técnico desde España.</span></div>
+      </div>
+    </footer>
+
+    <script>
+      const I18N = {
+        es: {
+          "brand.role": "· Desarrollo web",
+          "nav.about": "Sobre mí", "nav.case": "Caso de estudio", "nav.services": "Servicios", "nav.process": "Proceso", "nav.why": "Por qué yo", "nav.cta": "Hablemos",
+          "hero.eyebrow": "Desarrollador web · España",
+          "hero.title.a": "Aplicaciones web", "hero.title.b": "técnicas a medida", "hero.title.c": "que tu negocio puede usar mañana.",
+          "hero.sub": "Construyo calculadoras, configuradores y visualizadores 3D para empresas que necesitan algo más que una web bonita: lógica real, cálculo riguroso, exportaciones útiles y una interfaz en la que da gusto trabajar.",
+          "hero.cta1": "Empieza tu proyecto", "hero.cta2": "Ver caso de estudio",
+          "hero.stat1": "producto en producción", "hero.stat2": "código tipado y testeado", "hero.stat3": "visualización en tiempo real", "hero.stat4": "instalable y offline",
+          "about.eyebrow": "Sobre mí", "about.title": "Ingeniería de software aplicada a problemas reales de negocio.",
+          "about.lead": "No hago plantillas ni landings genéricas. Diseño y construyo aplicaciones web donde la lógica importa: cálculos correctos, datos persistentes, exportaciones que un cliente final puede llevarse al taller o a la oficina.",
+          "about.badge": "Disponible para nuevos proyectos",
+          "about.meta.k1": "Base", "about.meta.v1": "España · remoto", "about.meta.k2": "Foco", "about.meta.v2": "Web técnica a medida", "about.meta.k3": "Idiomas", "about.meta.v3": "ES · CA · EN", "about.meta.k4": "Respuesta", "about.meta.v4": "< 48 h",
+          "about.p1": "Soy Eneko Navarrete. Diseño y construyo aplicaciones web a medida para clientes que tienen un problema técnico concreto y necesitan una herramienta hecha para su caso — no un SaaS genérico que solo cubre el 60%. Mi enfoque combina ingeniería rigurosa (TypeScript estricto, tests, CI/CD), una UX cuidada y entregas rápidas en iteraciones cortas.",
+          "about.p2": "Cada proyecto se trata como software de producto: documentación viva, tests automatizados, despliegue continuo y un código que el cliente puede auditar o ampliar más adelante. Trabajo de cerca, sin agencias por medio, y la siguiente decisión técnica siempre queda explicada en lenguaje de negocio.",
+          "about.stack.title": "Stack y especialidades", "about.stack.lead": "Herramientas que uso a diario para entregar producto, no demos.",
+          "case.eyebrow": "Caso de estudio principal", "case.title": "Domitos — Calculadora de domos geodésicos",
+          "case.lead": "Un configurador-calculadora web completo para diseñar, presupuestar y construir domos geodésicos. Sustituye una hoja de cálculo legacy y una sesión de CAD por un flujo en el navegador, con 3D en tiempo real, planos PDF y BOM exportable.",
+          "case.tag": "PROYECTO INSIGNIA · 2025–2026", "case.h2": "De hoja de cálculo legacy a SaaS productivo.",
+          "case.p1": "Domitos parte del prototipo Acidome (HTML autocontenido) y lo convierte en una aplicación moderna construida con Vite, React 18, TypeScript estricto y react-three-fiber. El motor matemático vive en código puro y testeado: icosaedros, octaedros y tetraedros con subdivisión geodésica V1 a V6, proyección a esfera y cortes por porción (1/4, 5/12, 7/12, 3/4).",
+          "case.p2": "La aplicación calcula la lista de barras clasificadas por longitud con tolerancia ±0.5 mm, los ángulos de corte compuestos para conexiones Good Karma, la cubierta en m², los herrajes y el coste total — todo recalculado en menos de 200 ms mientras el usuario manipula la escena 3D.",
+          "case.prob.title": "El problema",
+          "case.prob.1": "Hojas de cálculo frágiles donde un error rompe todos los presupuestos.", "case.prob.2": "Sin previsualización 3D: imposible enseñar el resultado al cliente.", "case.prob.3": "Cortes y biseles calculados a mano, propensos a fallo.", "case.prob.4": "Sin reutilización de plantillas entre proyectos.",
+          "case.sol.title": "La solución",
+          "case.sol.1": "Motor matemático puro con tests de paridad contra el legacy.", "case.sol.2": "Visor 3D interactivo con r3f: cámara, capas, modo explosionado.", "case.sol.3": "Cortes, biseles y ángulos compuestos calculados al instante.", "case.sol.4": "SaaS multiusuario con auth, planes y proyectos persistentes.",
+          "case.res.title": "El resultado",
+          "case.res.1": "App PWA instalable, modo offline y rendimiento <200 ms.", "case.res.2": "Exportación a PDF, XLSX, CSV, OBJ y DXF en un clic.", "case.res.3": "Despliegue continuo en Cloudflare con cada push a main.", "case.res.4": "+34 tests unitarios, e2e Playwright y auditoría a11y en verde.",
+          "case.feat1.t": "Motor geodésico V1–V6", "case.feat1.p": "Icosaedro, octaedro y tetraedro con subdivisión hasta V6, proyección a esfera y porciones configurables.",
+          "case.feat2.t": "Cortes Good Karma", "case.feat2.p": "Ángulos compuestos de sierra ingletadora, biseles y longitudes reales tras conexión, listos para taller.",
+          "case.feat3.t": "Visor 3D interactivo", "case.feat3.p": "Cámara orbital, selección de barras, capas, materiales de madera y modo explosionado con un slider.",
+          "case.feat4.t": "Planos PDF + BOM", "case.feat4.p": "Plano de despiece con bin-packing 1D, BOM editable con precios y exportación XLSX en 4 hojas.",
+          "case.feat5.t": "Plantillas listas", "case.feat5.p": "Glamping, invernadero, evento, mini-domo. Punto de partida en un clic.",
+          "case.feat6.t": "SaaS multiusuario", "case.feat6.p": "Cuentas, proyectos persistidos, 4 tramos de suscripción y pago con Stripe.",
+          "gallery.eyebrow": "Domitos · capturas reales", "gallery.title": "La app por dentro: 3D, BOM, despiece y diagrama de corte.",
+          "gallery.lead": "No son mockups: son pantallas reales de Domitos en funcionamiento. Cada exportación está pensada para que el resultado pueda llevarse al taller sin pasar antes por un CAD.",
+          "gallery.s1": "Editor 3D · clasificación de barras por color", "gallery.s2": "BOM editable + exportación XLSX", "gallery.s3": "Plano de despiece · bin-packing 1D", "gallery.s4": "Diagrama de corte · ángulos compuestos y biseles, listos para sierra ingletadora",
+          "services.eyebrow": "Qué puedo hacer por ti", "services.title": "Software técnico que tu equipo y tus clientes van a usar de verdad.",
+          "services.lead": "Estos son los productos en los que mejor entrego: lógica densa, datos persistentes, interfaces precisas y entregables que el cliente puede llevarse al mundo físico.",
+          "services.s1.t": "Aplicaciones de cálculo", "services.s1.p": "Calculadoras de ingeniería, costes, dimensionado o energía. Motor matemático testeado, fórmulas auditables y resultados en tiempo real.",
+          "services.s2.t": "Herramientas de presupuesto", "services.s2.p": "Generadores de cotización con tarifas, descuentos, IVA y exportación a PDF/XLSX. Tu comercial cierra venta desde el móvil.",
+          "services.s3.t": "Configuradores de producto", "services.s3.p": "El cliente elige medidas, materiales y acabados; la app muestra el resultado, calcula precio y envía el pedido al ERP o por email.",
+          "services.s4.t": "Visualizadores 3D técnicos", "services.s4.p": "Modelos paramétricos en navegador con Three.js: rotación, capas, mediciones, exportación a OBJ/DXF para el equipo de producción.",
+          "services.s5.t": "Dashboards y back-office", "services.s5.p": "Paneles para operación: usuarios, métricas, facturación, auth con OAuth, planes y permisos. Hechos con Supabase y RLS desde el día uno.",
+          "services.s6.t": "PWA + despliegue continuo", "services.s6.p": "Apps instalables, modo offline, despliegue automático en Cloudflare o Vercel, dominio propio y SEO técnico cuidado.",
+          "process.eyebrow": "Cómo trabajo", "process.title": "Un ritmo semanal claro, demos cada viernes y código auditable desde el primer commit.",
+          "process.lead": "Sin agencias por medio. Sin meses de silencio. Cada semana hay algo que tocar y una decisión por tomar.",
+          "process.s1.time": "30–45 min", "process.s1.t": "Conversación inicial", "process.s1.p": "Me cuentas el problema y lo que has probado. Salimos con un mini-diagnóstico por escrito y una primera estimación de alcance.", "process.s1.d": "Documento de una página con objetivo, riesgos y siguiente paso.",
+          "process.s2.time": "3–5 días", "process.s2.t": "Spec corta y propuesta", "process.s2.p": "Convierto la conversación en un documento técnico breve: qué se construye, qué no, cómo se mide el éxito, en cuántas iteraciones y a qué precio.", "process.s2.d": "Spec + presupuesto cerrado por fases.",
+          "process.s3.time": "Cada viernes", "process.s3.t": "Iteraciones semanales con demo", "process.s3.p": "Cada lunes priorizamos juntos lo de la semana. El código está en tu GitHub desde el día uno. Sin sorpresas al final.", "process.s3.d": "App desplegada cada semana en staging + nota de cambios.",
+          "process.s4.time": "Producción", "process.s4.t": "Lanzamiento y mantenimiento", "process.s4.p": "Despliegue a producción, dominio propio, métricas activas. Después puedes seguir con horas mensuales, evolutivos o llevarte el código y operar solo.", "process.s4.d": "Handover técnico, runbook y métricas conectadas.",
+          "why.eyebrow": "Por qué contratarme", "why.title": "No es una landing genérica. Tampoco un proyecto genérico.",
+          "why.lead": "Trabajo con criterios que casi nadie aplica en proyectos a medida — pero que cambian completamente el resultado final.",
+          "why.r1.t": "Tipado estricto y tests desde el día uno", "why.r1.p": "TypeScript en modo strict con noUncheckedIndexedAccess, tests unitarios para toda la lógica de negocio y e2e con Playwright. Cero any, cero sorpresas en producción.",
+          "why.r2.t": "Arquitectura limpia, no acoplada al framework", "why.r2.p": "El núcleo de cálculo y dominio vive separado de la UI. Si mañana cambia React por otra cosa, tu lógica de negocio sigue funcionando intacta.",
+          "why.r3.t": "Entrega continua y auditable", "why.r3.p": "GitHub Actions con lint, typecheck y tests en cada PR. Despliegue automático en cada push a main. Cada cambio queda registrado y reversible.",
+          "why.r4.t": "Comunicación directa, sin agencias", "why.r4.p": "Hablas conmigo, no con un comercial. Documentación viva, demos semanales y decisiones técnicas explicadas en lenguaje de negocio.",
+          "contact.eyebrow": "Hablemos de tu proyecto", "contact.title.a": "¿Tienes un problema técnico", "contact.title.b": "que merece una herramienta a medida?",
+          "contact.lead": "Cuéntame qué necesita tu equipo o tus clientes. En menos de 48 horas te respondo con un primer diagnóstico, una estimación de alcance y la siguiente decisión a tomar.",
+          "contact.cta1": "Enviar email", "contact.cta2": "Ver caso de estudio", "contact.email": "o escríbeme directamente a",
+          "footer.legal": "© 2026 Eneko Navarrete · Desarrollo web técnico desde España."
+        },
+        ca: {
+          "brand.role": "· Desenvolupament web",
+          "nav.about": "Sobre mi", "nav.case": "Cas d'estudi", "nav.services": "Serveis", "nav.process": "Procés", "nav.why": "Per què jo", "nav.cta": "Parlem-ne",
+          "hero.eyebrow": "Desenvolupador web · Espanya",
+          "hero.title.a": "Aplicacions web", "hero.title.b": "tècniques a mida", "hero.title.c": "que el teu negoci pot fer servir demà.",
+          "hero.sub": "Construeixo calculadores, configuradors i visualitzadors 3D per a empreses que necessiten alguna cosa més que una web bonica: lògica real, càlcul rigorós, exportacions útils i una interfície en la qual fa gust treballar.",
+          "hero.cta1": "Comença el teu projecte", "hero.cta2": "Veure cas d'estudi",
+          "hero.stat1": "producte en producció", "hero.stat2": "codi tipat i testat", "hero.stat3": "visualització en temps real", "hero.stat4": "instal·lable i offline",
+          "about.eyebrow": "Sobre mi", "about.title": "Enginyeria de programari aplicada a problemes reals de negoci.",
+          "about.lead": "No faig plantilles ni landings genèriques. Disenyo i construeixo aplicacions web on la lògica importa: càlculs correctes, dades persistents, exportacions que un client final pot dur-se al taller o a l'oficina.",
+          "about.badge": "Disponible per a nous projectes",
+          "about.meta.k1": "Base", "about.meta.v1": "Espanya · remot", "about.meta.k2": "Focus", "about.meta.v2": "Web tècnica a mida", "about.meta.k3": "Idiomes", "about.meta.v3": "ES · CA · EN", "about.meta.k4": "Resposta", "about.meta.v4": "< 48 h",
+          "about.p1": "Sóc l'Eneko Navarrete. Disenyo i construeixo aplicacions web a mida per a clients que tenen un problema tècnic concret i necessiten una eina feta per al seu cas — no un SaaS genèric que només cobreix el 60%. El meu enfocament combina enginyeria rigorosa (TypeScript estricte, tests, CI/CD), una UX cuidada i entregues ràpides en iteracions curtes.",
+          "about.p2": "Cada projecte es tracta com a programari de producte: documentació viva, tests automatitzats, desplegament continu i un codi que el client pot auditar o ampliar més endavant. Treballo de prop, sense agències pel mig, i la següent decisió tècnica sempre queda explicada en llenguatge de negoci.",
+          "about.stack.title": "Stack i especialitats", "about.stack.lead": "Eines que faig servir cada dia per entregar producte, no demos.",
+          "case.eyebrow": "Cas d'estudi principal", "case.title": "Domitos — Calculadora de cúpules geodèsiques",
+          "case.lead": "Un configurador-calculadora web complet per dissenyar, pressupostar i construir cúpules geodèsiques. Substitueix un full de càlcul legacy i una sessió de CAD per un flux al navegador, amb 3D en temps real, plànols PDF i BOM exportable.",
+          "case.tag": "PROJECTE INSÍGNIA · 2025–2026", "case.h2": "De full de càlcul legacy a SaaS productiu.",
+          "case.p1": "Domitos parteix del prototip Acidome (HTML autocontingut) i el converteix en una aplicació moderna construïda amb Vite, React 18, TypeScript estricte i react-three-fiber. El motor matemàtic viu en codi pur i testat: icosaedres, octaedres i tetraedres amb subdivisió geodèsica V1 a V6, projecció a esfera i talls per porció (1/4, 5/12, 7/12, 3/4).",
+          "case.p2": "L'aplicació calcula la llista de barres classificades per longitud amb tolerància ±0.5 mm, els angles de tall compostos per a connexions Good Karma, la coberta en m², els ferratges i el cost total — tot recalculat en menys de 200 ms mentre l'usuari manipula l'escena 3D.",
+          "case.prob.title": "El problema",
+          "case.prob.1": "Fulls de càlcul fràgils on un error trenca tots els pressupostos.", "case.prob.2": "Sense previsualització 3D: impossible mostrar el resultat al client.", "case.prob.3": "Talls i biseells calculats a mà, propensos a errors.", "case.prob.4": "Sense reutilització de plantilles entre projectes.",
+          "case.sol.title": "La solució",
+          "case.sol.1": "Motor matemàtic pur amb tests de paritat contra el legacy.", "case.sol.2": "Visor 3D interactiu amb r3f: càmera, capes, mode explosionat.", "case.sol.3": "Talls, biseells i angles compostos calculats a l'instant.", "case.sol.4": "SaaS multiusuari amb auth, plans i projectes persistents.",
+          "case.res.title": "El resultat",
+          "case.res.1": "App PWA instal·lable, mode offline i rendiment <200 ms.", "case.res.2": "Exportació a PDF, XLSX, CSV, OBJ i DXF amb un clic.", "case.res.3": "Desplegament continu a Cloudflare a cada push a main.", "case.res.4": "+34 tests unitaris, e2e Playwright i auditoria a11y en verd.",
+          "case.feat1.t": "Motor geodèsic V1–V6", "case.feat1.p": "Icosaedre, octaedre i tetraedre amb subdivisió fins a V6, projecció a esfera i porcions configurables.",
+          "case.feat2.t": "Talls Good Karma", "case.feat2.p": "Angles compostos de serra englet, biseells i longituds reals després de connexió, llestos per al taller.",
+          "case.feat3.t": "Visor 3D interactiu", "case.feat3.p": "Càmera orbital, selecció de barres, capes, materials de fusta i mode explosionat amb un slider.",
+          "case.feat4.t": "Plànols PDF + BOM", "case.feat4.p": "Plànol de despeçament amb bin-packing 1D, BOM editable amb preus i exportació XLSX en 4 fulls.",
+          "case.feat5.t": "Plantilles llestes", "case.feat5.p": "Glamping, hivernacle, esdeveniment, mini-cúpula. Punt de partida amb un clic.",
+          "case.feat6.t": "SaaS multiusuari", "case.feat6.p": "Comptes, projectes persistits, 4 trams de subscripció i pagament amb Stripe.",
+          "gallery.eyebrow": "Domitos · captures reals", "gallery.title": "L'app per dins: 3D, BOM, despeçament i diagrama de tall.",
+          "gallery.lead": "No són mockups: són pantalles reals de Domitos en funcionament. Cada exportació està pensada perquè el resultat es pugui dur al taller sense passar abans per un CAD.",
+          "gallery.s1": "Editor 3D · classificació de barres per color", "gallery.s2": "BOM editable + exportació XLSX", "gallery.s3": "Plànol de despeçament · bin-packing 1D", "gallery.s4": "Diagrama de tall · angles compostos i biseells, llestos per a serra englet",
+          "services.eyebrow": "Què puc fer per tu", "services.title": "Programari tècnic que el teu equip i els teus clients faran servir de debò.",
+          "services.lead": "Aquests són els productes on millor entrego: lògica densa, dades persistents, interfícies precises i lliurables que el client pot dur-se al món físic.",
+          "services.s1.t": "Aplicacions de càlcul", "services.s1.p": "Calculadores d'enginyeria, costos, dimensionat o energia. Motor matemàtic testat, fórmules auditables i resultats en temps real.",
+          "services.s2.t": "Eines de pressupost", "services.s2.p": "Generadors de cotització amb tarifes, descomptes, IVA i exportació a PDF/XLSX. El teu comercial tanca venda des del mòbil.",
+          "services.s3.t": "Configuradors de producte", "services.s3.p": "El client tria mides, materials i acabats; l'app mostra el resultat, calcula preu i envia la comanda a l'ERP o per correu.",
+          "services.s4.t": "Visualitzadors 3D tècnics", "services.s4.p": "Models paramètrics al navegador amb Three.js: rotació, capes, mesures, exportació a OBJ/DXF per a l'equip de producció.",
+          "services.s5.t": "Dashboards i back-office", "services.s5.p": "Panells d'operació: usuaris, mètriques, facturació, auth amb OAuth, plans i permisos. Fets amb Supabase i RLS des del primer dia.",
+          "services.s6.t": "PWA + desplegament continu", "services.s6.p": "Apps instal·lables, mode offline, desplegament automàtic a Cloudflare o Vercel, domini propi i SEO tècnic cuidat.",
+          "process.eyebrow": "Com treballo", "process.title": "Un ritme setmanal clar, demos cada divendres i codi auditable des del primer commit.",
+          "process.lead": "Sense agències pel mig. Sense mesos de silenci. Cada setmana hi ha alguna cosa per tocar i una decisió per prendre.",
+          "process.s1.time": "30–45 min", "process.s1.t": "Conversa inicial", "process.s1.p": "Em comentes el problema i el que has provat. Sortim amb un mini-diagnòstic per escrit i una primera estimació d'abast.", "process.s1.d": "Document d'una pàgina amb objectiu, riscos i següent pas.",
+          "process.s2.time": "3–5 dies", "process.s2.t": "Spec curta i proposta", "process.s2.p": "Converteixo la conversa en un document tècnic breu: què es construeix, què no, com es mesura l'èxit, en quantes iteracions i a quin preu.", "process.s2.d": "Spec + pressupost tancat per fases.",
+          "process.s3.time": "Cada divendres", "process.s3.t": "Iteracions setmanals amb demo", "process.s3.p": "Cada dilluns prioritzem junts la setmana. El codi és al teu GitHub des del primer dia. Sense sorpreses al final.", "process.s3.d": "App desplegada cada setmana en staging + nota de canvis.",
+          "process.s4.time": "Producció", "process.s4.t": "Llançament i manteniment", "process.s4.p": "Desplegament a producció, domini propi, mètriques actives. Després pots seguir amb hores mensuals, evolutius o endur-te el codi i operar sol.", "process.s4.d": "Handover tècnic, runbook i mètriques connectades.",
+          "why.eyebrow": "Per què contractar-me", "why.title": "No és una landing genèrica. Tampoc un projecte genèric.",
+          "why.lead": "Treballo amb criteris que gairebé ningú aplica en projectes a mida — però que canvien completament el resultat final.",
+          "why.r1.t": "Tipat estricte i tests des del primer dia", "why.r1.p": "TypeScript en mode strict amb noUncheckedIndexedAccess, tests unitaris per a tota la lògica de negoci i e2e amb Playwright. Zero any, zero sorpreses a producció.",
+          "why.r2.t": "Arquitectura neta, no acoblada al framework", "why.r2.p": "El nucli de càlcul i domini viu separat de la UI. Si demà canvies React per una altra cosa, la teva lògica de negoci continua funcionant intacta.",
+          "why.r3.t": "Entrega contínua i auditable", "why.r3.p": "GitHub Actions amb lint, typecheck i tests a cada PR. Desplegament automàtic a cada push a main. Cada canvi queda registrat i reversible.",
+          "why.r4.t": "Comunicació directa, sense agències", "why.r4.p": "Parles amb mi, no amb un comercial. Documentació viva, demos setmanals i decisions tècniques explicades en llenguatge de negoci.",
+          "contact.eyebrow": "Parlem del teu projecte", "contact.title.a": "Tens un problema tècnic", "contact.title.b": "que mereix una eina a mida?",
+          "contact.lead": "Explica'm què necessita el teu equip o els teus clients. En menys de 48 hores et responc amb un primer diagnòstic, una estimació d'abast i la següent decisió a prendre.",
+          "contact.cta1": "Enviar correu", "contact.cta2": "Veure cas d'estudi", "contact.email": "o escriu-me directament a",
+          "footer.legal": "© 2026 Eneko Navarrete · Desenvolupament web tècnic des d'Espanya."
+        },
+        en: {
+          "brand.role": "· Web development",
+          "nav.about": "About", "nav.case": "Case study", "nav.services": "Services", "nav.process": "Process", "nav.why": "Why me", "nav.cta": "Let's talk",
+          "hero.eyebrow": "Web developer · Spain",
+          "hero.title.a": "Bespoke", "hero.title.b": "technical web apps", "hero.title.c": "your business can use tomorrow.",
+          "hero.sub": "I build calculators, configurators and 3D visualizers for companies that need more than a pretty website: real logic, rigorous math, useful exports and an interface that's a joy to work with.",
+          "hero.cta1": "Start your project", "hero.cta2": "See case study",
+          "hero.stat1": "product live in production", "hero.stat2": "typed and tested code", "hero.stat3": "real-time visualization", "hero.stat4": "installable, offline-ready",
+          "about.eyebrow": "About", "about.title": "Software engineering applied to real business problems.",
+          "about.lead": "I don't ship templates or generic landings. I design and build web apps where the logic matters: correct calculations, persistent data, exports your client can take to the workshop or office.",
+          "about.badge": "Available for new projects",
+          "about.meta.k1": "Based in", "about.meta.v1": "Spain · remote", "about.meta.k2": "Focus", "about.meta.v2": "Bespoke technical web", "about.meta.k3": "Languages", "about.meta.v3": "ES · CA · EN", "about.meta.k4": "Reply", "about.meta.v4": "< 48 h",
+          "about.p1": "I'm Eneko Navarrete. I design and build bespoke web apps for clients with a concrete technical problem who need a tool built for their case — not a generic SaaS that only covers 60%. My approach combines rigorous engineering (strict TypeScript, tests, CI/CD), careful UX and fast delivery in short iterations.",
+          "about.p2": "Every project is treated as product software: living documentation, automated tests, continuous deployment, and code the client can audit or extend later. I work closely, with no agency in between, and every technical decision is explained in business language.",
+          "about.stack.title": "Stack and specialties", "about.stack.lead": "Tools I use daily to deliver product, not demos.",
+          "case.eyebrow": "Featured case study", "case.title": "Domitos — Geodesic dome calculator",
+          "case.lead": "A complete configurator-calculator web app to design, quote and build geodesic domes. Replaces a legacy spreadsheet and a CAD session with a browser flow, real-time 3D, PDF blueprints and an exportable BOM.",
+          "case.tag": "FLAGSHIP PROJECT · 2025–2026", "case.h2": "From legacy spreadsheet to production-grade SaaS.",
+          "case.p1": "Domitos started from the Acidome prototype (a self-contained HTML) and turned it into a modern app built with Vite, React 18, strict TypeScript and react-three-fiber. The math engine lives in pure, tested code: icosahedra, octahedra and tetrahedra with geodesic subdivision V1 through V6, sphere projection and slicing by portion (1/4, 5/12, 7/12, 3/4).",
+          "case.p2": "The app computes the list of beams classified by length within ±0.5 mm tolerance, compound cut angles for Good Karma connections, the cover surface in m², hardware and total cost — all recomputed in under 200 ms while the user manipulates the 3D scene.",
+          "case.prob.title": "The problem",
+          "case.prob.1": "Fragile spreadsheets where one error breaks every quote.", "case.prob.2": "No 3D preview: impossible to show the result to the client.", "case.prob.3": "Cuts and bevels calculated by hand, error-prone.", "case.prob.4": "No template reuse across projects.",
+          "case.sol.title": "The solution",
+          "case.sol.1": "Pure math engine with parity tests against the legacy.", "case.sol.2": "Interactive 3D viewer with r3f: camera, layers, exploded mode.", "case.sol.3": "Cuts, bevels and compound angles computed instantly.", "case.sol.4": "Multi-tenant SaaS with auth, plans and persistent projects.",
+          "case.res.title": "The result",
+          "case.res.1": "Installable PWA, offline mode and <200 ms performance.", "case.res.2": "Export to PDF, XLSX, CSV, OBJ and DXF in one click.", "case.res.3": "Continuous deployment on Cloudflare on every push to main.", "case.res.4": "+34 unit tests, Playwright e2e and a11y audit all green.",
+          "case.feat1.t": "Geodesic engine V1–V6", "case.feat1.p": "Icosahedron, octahedron and tetrahedron with subdivision up to V6, sphere projection and configurable portions.",
+          "case.feat2.t": "Good Karma cuts", "case.feat2.p": "Compound miter saw angles, bevels and real lengths after connection, ready for the workshop.",
+          "case.feat3.t": "Interactive 3D viewer", "case.feat3.p": "Orbit camera, beam selection, layers, wood materials and exploded mode with a slider.",
+          "case.feat4.t": "PDF blueprints + BOM", "case.feat4.p": "Cut plan with 1D bin-packing, editable BOM with prices and XLSX export in 4 sheets.",
+          "case.feat5.t": "Ready-made templates", "case.feat5.p": "Glamping, greenhouse, event, mini-dome. A starting point in one click.",
+          "case.feat6.t": "Multi-tenant SaaS", "case.feat6.p": "Accounts, persisted projects, 4 subscription tiers and Stripe checkout.",
+          "gallery.eyebrow": "Domitos · real screenshots", "gallery.title": "Inside the app: 3D, BOM, cut plan and cut diagram.",
+          "gallery.lead": "Not mockups: actual screens from Domitos running. Every export is designed so the output can go straight to the workshop without a CAD step in between.",
+          "gallery.s1": "3D editor · beams classified by color", "gallery.s2": "Editable BOM + XLSX export", "gallery.s3": "Cut plan · 1D bin-packing", "gallery.s4": "Cut diagram · compound angles and bevels, ready for the miter saw",
+          "services.eyebrow": "What I can do for you", "services.title": "Technical software your team and clients will actually use.",
+          "services.lead": "These are the products I deliver best: dense logic, persistent data, precise interfaces and outputs your client can take to the physical world.",
+          "services.s1.t": "Calculation apps", "services.s1.p": "Engineering, cost, sizing or energy calculators. Tested math engine, auditable formulas and real-time results.",
+          "services.s2.t": "Quoting tools", "services.s2.p": "Quote generators with tariffs, discounts, VAT and PDF/XLSX export. Your sales rep closes deals from a phone.",
+          "services.s3.t": "Product configurators", "services.s3.p": "The client picks sizes, materials and finishes; the app shows the result, computes the price and sends the order to your ERP or by email.",
+          "services.s4.t": "Technical 3D visualizers", "services.s4.p": "Parametric models in the browser with Three.js: rotation, layers, measurements, export to OBJ/DXF for the production team.",
+          "services.s5.t": "Dashboards & back-office", "services.s5.p": "Operations panels: users, metrics, billing, OAuth auth, plans and permissions. Built with Supabase and RLS from day one.",
+          "services.s6.t": "PWA + continuous deployment", "services.s6.p": "Installable apps, offline mode, automatic deploys on Cloudflare or Vercel, custom domain and careful technical SEO.",
+          "process.eyebrow": "How I work", "process.title": "A clear weekly rhythm, demos every Friday, and auditable code from the first commit.",
+          "process.lead": "No agencies in the middle. No months of silence. Every week there's something to touch and a decision to make.",
+          "process.s1.time": "30–45 min", "process.s1.t": "Initial conversation", "process.s1.p": "You walk me through the problem and what you've tried. We come out with a written mini-diagnosis and a first scope estimate.", "process.s1.d": "One-page document with objective, risks and next step.",
+          "process.s2.time": "3–5 days", "process.s2.t": "Short spec and proposal", "process.s2.p": "I turn the conversation into a brief technical document: what gets built, what doesn't, how success is measured, in how many iterations and at what price.", "process.s2.d": "Spec + fixed-price proposal broken down by phases.",
+          "process.s3.time": "Every Friday", "process.s3.t": "Weekly iterations with demo", "process.s3.p": "Every Monday we prioritize the week together. The code is in your GitHub from day one. No surprises at the end.", "process.s3.d": "App deployed weekly to staging + change notes.",
+          "process.s4.time": "Production", "process.s4.t": "Launch and maintenance", "process.s4.p": "Production deploy, custom domain, live metrics. After that you can continue with monthly hours, evolutions, or take the code and run it yourself.", "process.s4.d": "Technical handover, runbook, and connected metrics.",
+          "why.eyebrow": "Why hire me", "why.title": "Not a generic landing. Not a generic project.",
+          "why.lead": "I apply standards almost no one applies to bespoke projects — but they completely change the final result.",
+          "why.r1.t": "Strict typing and tests from day one", "why.r1.p": "TypeScript in strict mode with noUncheckedIndexedAccess, unit tests for all business logic and Playwright e2e. Zero any, zero production surprises.",
+          "why.r2.t": "Clean architecture, framework-agnostic", "why.r2.p": "The math and domain core lives separated from the UI. If you swap React tomorrow, your business logic keeps working untouched.",
+          "why.r3.t": "Continuous, auditable delivery", "why.r3.p": "GitHub Actions with lint, typecheck and tests on every PR. Automatic deploy on every push to main. Every change is logged and reversible.",
+          "why.r4.t": "Direct communication, no agencies", "why.r4.p": "You talk to me, not a salesperson. Living documentation, weekly demos and technical decisions explained in business language.",
+          "contact.eyebrow": "Let's talk about your project", "contact.title.a": "Got a technical problem", "contact.title.b": "that deserves a bespoke tool?",
+          "contact.lead": "Tell me what your team or clients need. In under 48 hours I'll get back to you with a first diagnosis, a scope estimate and the next decision to make.",
+          "contact.cta1": "Send email", "contact.cta2": "See case study", "contact.email": "or write to me directly at",
+          "footer.legal": "© 2026 Eneko Navarrete · Technical web development from Spain."
+        }
+      };
+
+      const langButtons = document.querySelectorAll(".lang button");
+      const setLang = (lang) => {
+        const dict = I18N[lang] || I18N.es;
+        document.documentElement.lang = lang;
+        document.querySelectorAll("[data-i18n]").forEach((el) => {
+          const key = el.getAttribute("data-i18n");
+          if (dict[key] != null) el.textContent = dict[key];
+        });
+        langButtons.forEach((b) => {
+          const active = b.getAttribute("data-lang") === lang;
+          b.classList.toggle("active", active);
+          b.setAttribute("aria-selected", active ? "true" : "false");
+        });
+        try { localStorage.setItem("eneko.lang", lang); } catch (_) {}
+      };
+      langButtons.forEach((b) => {
+        b.addEventListener("click", () => setLang(b.getAttribute("data-lang")));
+      });
+      (function initLang() {
+        let lang = "es";
+        try {
+          const stored = localStorage.getItem("eneko.lang");
+          if (stored && I18N[stored]) lang = stored;
+          else {
+            const nav = (navigator.language || "es").toLowerCase();
+            if (nav.startsWith("ca")) lang = "ca";
+            else if (nav.startsWith("en")) lang = "en";
+            else lang = "es";
+          }
+        } catch (_) {}
+        setLang(lang);
+      })();
+
+      const reveals = document.querySelectorAll(".reveal");
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            e.target.classList.add("is-visible");
+            io.unobserve(e.target);
+          }
+        });
+      }, { threshold: 0.12, rootMargin: "0px 0px -40px 0px" });
+      reveals.forEach((el) => io.observe(el));
+
+      const nav = document.getElementById("nav");
+      const onScroll = () => {
+        if (window.scrollY > 8) nav.classList.add("scrolled");
+        else nav.classList.remove("scrolled");
+      };
+      window.addEventListener("scroll", onScroll, { passive: true });
+      onScroll();
+    </script>
+  </body>
+</html>
