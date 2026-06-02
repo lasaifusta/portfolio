@@ -15,7 +15,7 @@
     <!-- Open Graph (LinkedIn, Facebook, WhatsApp) -->
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Eneko Navarrete — Aplicaciones web técnicas a medida" />
-    <meta property="og:description" content="Calculadoras, configuradores y visualizadores 3D para negocios técnicos. Caso de estudio: Domitos, calculadora de domos geodésicos." />
+    <meta property="og:description" content="Calculadoras, configuradores y visualizadores 3D para negocios técnicos. Caso de estudio: DomesLab, calculadora de domos geodésicos." />
     <meta property="og:image" content="screenshots/editor-3d.png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
@@ -317,6 +317,77 @@
         .lang button { padding: 5px 8px; font-size: 11px; }
         .process-grid { grid-template-columns: 1fr; }
       }
+
+      /* ===== Más trabajo ===== */
+      .work-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+        gap: 20px; margin-top: 6px;
+      }
+      .work-card {
+        --proj: var(--accent);
+        background: var(--bg-card); border: 1px solid var(--border);
+        border-radius: var(--radius-lg); overflow: hidden;
+        box-shadow: var(--shadow-soft); display: flex; flex-direction: column;
+        transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease;
+      }
+      .work-card:hover {
+        transform: translateY(-4px);
+        border-color: color-mix(in srgb, var(--proj) 55%, var(--border));
+        box-shadow: 0 18px 40px rgba(0,0,0,.34);
+      }
+      .work-thumb {
+        position: relative; height: 118px; overflow: hidden;
+        border-bottom: 1px solid var(--border-soft);
+        background:
+          radial-gradient(140px 90px at 82% -20%, color-mix(in srgb, var(--proj) 42%, transparent), transparent 70%),
+          linear-gradient(160deg, color-mix(in srgb, var(--proj) 16%, var(--bg-card)), var(--bg-soft));
+        display: flex; align-items: flex-end; padding: 12px 14px;
+      }
+      .work-thumb::before {
+        content: ""; position: absolute; inset: 0; opacity: .5;
+        background-image:
+          linear-gradient(color-mix(in srgb, var(--proj) 12%, transparent) 1px, transparent 1px),
+          linear-gradient(90deg, color-mix(in srgb, var(--proj) 12%, transparent) 1px, transparent 1px);
+        background-size: 24px 24px;
+        -webkit-mask-image: linear-gradient(180deg, rgba(0,0,0,.5), transparent 80%);
+                mask-image: linear-gradient(180deg, rgba(0,0,0,.5), transparent 80%);
+      }
+      .work-monogram {
+        position: absolute; top: 4px; right: 14px;
+        font-family: var(--mono); font-weight: 700; font-size: 58px;
+        line-height: 1; letter-spacing: -.03em;
+        color: color-mix(in srgb, var(--proj) 26%, transparent);
+        user-select: none;
+      }
+      .work-url {
+        position: relative; font-family: var(--mono); font-size: 12.5px;
+        color: color-mix(in srgb, var(--proj) 88%, var(--text));
+        display: inline-flex; align-items: center; gap: 7px;
+      }
+      .work-url::before {
+        content: ""; width: 8px; height: 8px; border-radius: 50%;
+        background: var(--proj); box-shadow: 0 0 10px var(--proj);
+      }
+      .work-body { padding: 15px 18px 18px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+      .work-kicker {
+        font-family: var(--mono); font-size: 11px; text-transform: uppercase;
+        letter-spacing: .14em; color: var(--text-muted);
+      }
+      .work-card h3 { margin: 0; font-size: 17px; font-weight: 700; }
+      .work-card p { margin: 0; color: var(--text-dim); font-size: 14px; line-height: 1.55; }
+      .work-tags { margin-top: auto; display: flex; flex-wrap: wrap; gap: 6px; padding-top: 8px; }
+      .work-tag {
+        font-family: var(--mono); font-size: 10.5px; padding: 3px 9px;
+        border: 1px solid var(--border); border-radius: 999px; color: var(--text-dim);
+      }
+      .work-note {
+        margin-top: 14px; font-size: 13px; color: var(--text-muted);
+        display: flex; align-items: center; gap: 8px;
+      }
+      @media (max-width: 520px) {
+        .work-grid { grid-template-columns: 1fr; }
+      }
     </style>
   </head>
   <body>
@@ -331,6 +402,7 @@
         <div class="nav-links">
           <a href="#about" data-i18n="nav.about">Sobre mí</a>
           <a href="#case" data-i18n="nav.case">Caso de estudio</a>
+          <a href="#work" data-i18n="nav.work">Más trabajo</a>
           <a href="#services" data-i18n="nav.services">Servicios</a>
           <a href="#process" data-i18n="nav.process">Proceso</a>
           <a href="#why" data-i18n="nav.why">Por qué yo</a>
@@ -365,10 +437,10 @@
           <a href="#case" class="cta-ghost" data-i18n="hero.cta2">Ver caso de estudio</a>
         </div>
         <div class="hero-stats reveal delay-4">
-          <div class="stat"><div class="num">v1.0<small>·</small></div><div class="lbl" data-i18n="hero.stat1">producto en producción</div></div>
-          <div class="stat"><div class="num">100%</div><div class="lbl" data-i18n="hero.stat2">código tipado y testeado</div></div>
-          <div class="stat"><div class="num">3D</div><div class="lbl" data-i18n="hero.stat3">visualización en tiempo real</div></div>
-          <div class="stat"><div class="num">PWA</div><div class="lbl" data-i18n="hero.stat4">instalable y offline</div></div>
+          <div class="stat"><div class="num">SaaS</div><div class="lbl" data-i18n="hero.stat1">en producción, con pagos Stripe</div></div>
+          <div class="stat"><div class="num">3D</div><div class="lbl" data-i18n="hero.stat2">configurador en tiempo real</div></div>
+          <div class="stat"><div class="num">PWA</div><div class="lbl" data-i18n="hero.stat3">instalable y offline</div></div>
+          <div class="stat"><div class="num">TS</div><div class="lbl" data-i18n="hero.stat4">tipado estricto y con tests</div></div>
         </div>
       </section>
 
@@ -394,6 +466,7 @@
           <div class="reveal delay-1">
             <p style="color:var(--text-dim); font-size:17px; line-height:1.7;" data-i18n="about.p1">Soy Eneko Navarrete. Diseño y construyo aplicaciones web a medida para clientes que tienen un problema técnico concreto y necesitan una herramienta hecha para su caso — no un SaaS genérico que solo cubre el 60%. Mi enfoque combina ingeniería rigurosa (TypeScript estricto, tests, CI/CD), una UX cuidada y entregas rápidas en iteraciones cortas.</p>
             <p style="color:var(--text-dim); font-size:17px; line-height:1.7;" data-i18n="about.p2">Cada proyecto se trata como software de producto: documentación viva, tests automatizados, despliegue continuo y un código que el cliente puede auditar o ampliar más adelante. Trabajo de cerca, sin agencias por medio, y la siguiente decisión técnica siempre queda explicada en lenguaje de negocio.</p>
+            <p style="color:var(--text-dim); font-size:17px; line-height:1.7;" data-i18n="about.p3">Aprendo rápido y no le tengo miedo a las herramientas nuevas: lo que ayer no sabía hacer, esta semana ya está en producción.</p>
             <div class="about-card" style="margin-top: 24px;">
               <h3 data-i18n="about.stack.title">Stack y especialidades</h3>
               <p data-i18n="about.stack.lead">Herramientas que uso a diario para entregar producto, no demos.</p>
@@ -409,25 +482,32 @@
         <div class="container">
           <div class="section-head reveal">
             <span class="eyebrow"><span data-i18n="case.eyebrow">Caso de estudio principal</span></span>
-            <h2 data-i18n="case.title">Domitos — Calculadora de domos geodésicos</h2>
+            <h2 data-i18n="case.title">DomesLab — Calculadora de domos geodésicos</h2>
             <p data-i18n="case.lead">Un configurador-calculadora web completo para diseñar, presupuestar y construir domos geodésicos. Sustituye una hoja de cálculo legacy y una sesión de CAD por un flujo en el navegador, con 3D en tiempo real, planos PDF y BOM exportable.</p>
           </div>
           <div class="case-hero">
             <div class="reveal">
               <div class="case-tag" data-i18n="case.tag">PROYECTO INSIGNIA · 2025–2026</div>
               <h2 data-i18n="case.h2">De hoja de cálculo legacy a SaaS productivo.</h2>
-              <p data-i18n="case.p1">Domitos parte del prototipo Acidome (HTML autocontenido) y lo convierte en una aplicación moderna construida con Vite, React 18, TypeScript estricto y react-three-fiber. El motor matemático vive en código puro y testeado: icosaedros, octaedros y tetraedros con subdivisión geodésica V1 a V6, proyección a esfera y cortes por porción (1/4, 5/12, 7/12, 3/4).</p>
+              <p data-i18n="case.p1">DomesLab parte del prototipo Acidome (HTML autocontenido) y lo convierte en una aplicación moderna construida con Vite, React 18, TypeScript estricto y react-three-fiber. El motor matemático vive en código puro y testeado: icosaedros, octaedros y tetraedros con subdivisión geodésica V1 a V6, proyección a esfera y cortes por porción (1/4, 5/12, 7/12, 3/4).</p>
               <p data-i18n="case.p2">La aplicación calcula la lista de barras clasificadas por longitud con tolerancia ±0.5&nbsp;mm, los ángulos de corte compuestos para conexiones Good Karma, la cubierta en m², los herrajes y el coste total — todo recalculado en menos de 200&nbsp;ms mientras el usuario manipula la escena 3D.</p>
+              <p data-i18n="case.p3">Funciones como el corte axial Good Karma Pro — que la conexión Good Karma estándar no resolvía — salieron de hablar con constructores reales y ver dónde se atascaban. El criterio de diseño: enseñar lo que hay que decidir y esconder la matemática que no necesitan.</p>
               <div class="case-tech">
                 <span class="chip green">Vite 5</span><span class="chip green">React 18</span><span class="chip green">TypeScript strict</span><span class="chip">Three.js + r3f</span><span class="chip">Tailwind</span><span class="chip">Zustand</span><span class="chip">Supabase</span><span class="chip">Stripe</span><span class="chip">Vitest</span><span class="chip">Playwright</span><span class="chip">jsPDF</span><span class="chip">SheetJS</span><span class="chip">Cloudflare Pages</span>
               </div>
+              <div class="hero-actions" style="margin-top:24px;">
+                <a href="https://domeslab.lasaifusta.workers.dev/" class="cta" target="_blank" rel="noopener" data-i18n="case.demo">
+                  <span>Ver demo en vivo</span>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg>
+                </a>
+              </div>
             </div>
-            <div class="dome-viewport reveal delay-1" aria-label="Captura del editor 3D de Domitos">
+            <div class="dome-viewport reveal delay-1" aria-label="Captura del editor 3D de DomesLab">
               <div class="dome-chrome">
                 <div class="dome-dots"><span></span><span></span><span></span></div>
-                <div class="dome-label">domitos.app · /editor</div>
+                <div class="dome-label">domeslab.lasaifusta.workers.dev · /editor</div>
               </div>
-              <img src="screenshots/editor-3d.png" alt="Editor 3D de Domitos con visualización del domo y barras clasificadas por color" loading="lazy" class="dome-shot" />
+              <img src="screenshots/editor-3d.png" alt="Editor 3D de DomesLab con visualización del domo y barras clasificadas por color" loading="lazy" class="dome-shot" />
             </div>
           </div>
 
@@ -499,13 +579,13 @@
       <section class="gallery" id="gallery">
         <div class="container">
           <div class="section-head reveal">
-            <span class="eyebrow"><span data-i18n="gallery.eyebrow">Domitos · capturas reales</span></span>
+            <span class="eyebrow"><span data-i18n="gallery.eyebrow">DomesLab · capturas reales</span></span>
             <h2 data-i18n="gallery.title">La app por dentro: 3D, BOM, despiece y diagrama de corte.</h2>
-            <p data-i18n="gallery.lead">No son mockups: son pantallas reales de Domitos en funcionamiento. Cada exportación está pensada para que el resultado pueda llevarse al taller sin pasar antes por un CAD.</p>
+            <p data-i18n="gallery.lead">No son mockups: son pantallas reales de DomesLab en funcionamiento. Cada exportación está pensada para que el resultado pueda llevarse al taller sin pasar antes por un CAD.</p>
           </div>
           <div class="gallery-grid">
             <figure class="shot hero-shot reveal">
-              <img src="screenshots/editor-3d.png" alt="Editor 3D de Domitos" loading="lazy" />
+              <img src="screenshots/editor-3d.png" alt="Editor 3D de DomesLab" loading="lazy" />
               <figcaption class="shot-caption"><span data-i18n="gallery.s1">Editor 3D · clasificación de barras por color</span><span class="tag">/app</span></figcaption>
             </figure>
             <figure class="shot reveal delay-1">
@@ -524,6 +604,88 @@
             </figure>
           </div>
         </div>
+      </section>
+
+      <section class="container" id="work">
+        <div class="section-head reveal">
+          <span class="eyebrow"><span data-i18n="work.eyebrow">Otros proyectos</span></span>
+          <h2 data-i18n="work.title">Más trabajo: webs a medida, rediseños y visualizadores 3D.</h2>
+          <p data-i18n="work.lead">Junto a DomesLab, una selección de proyectos en los que he trabajado: webs para negocios y profesionales, propuestas de rediseño con varias direcciones visuales y herramientas técnicas en 3D. Algunas son entregas reales; otras, exploraciones y propuestas.</p>
+        </div>
+        <div class="work-grid">
+
+          <article class="work-card reveal" style="--proj:#3a6b3c">
+            <div class="work-thumb"><span class="work-monogram">CR</span><span class="work-url" data-i18n="work.p1.url">propuesta · GitHub</span></div>
+            <div class="work-body">
+              <span class="work-kicker" data-i18n="work.p1.k">Propuesta de rediseño · Catalán</span>
+              <h3 data-i18n="work.p1.t">Ajuntament de Castellar del Riu</h3>
+              <p data-i18n="work.p1.p">Propuesta de rediseño para la web de un pueblo del Berguedà: la misma información y las mismas fotos, con una interfaz que respira montaña y se entiende a la primera. Código en mi GitHub.</p>
+              <div class="work-tags"><span class="work-tag">Diseño web</span><span class="work-tag">Sector público</span><span class="work-tag">Responsive</span></div>
+            </div>
+          </article>
+
+          <article class="work-card reveal delay-1" style="--proj:#c7f048">
+            <div class="work-thumb"><span class="work-monogram">MC</span><span class="work-url" data-i18n="work.p2.url">propuesta · GitHub</span></div>
+            <div class="work-body">
+              <span class="work-kicker" data-i18n="work.p2.k">Propuesta de rediseño · 2 direcciones</span>
+              <h3 data-i18n="work.p2.t">Macusa — Maderas Cunill</h3>
+              <p data-i18n="work.p2.p">Propuesta de rediseño para una carpintería industrial con medio siglo de historia. Dos líneas visuales sobre la misma estructura, tipografía editorial y catálogo claro. Código en mi GitHub.</p>
+              <div class="work-tags"><span class="work-tag">Rediseño</span><span class="work-tag">Industrial</span><span class="work-tag">Branding</span></div>
+            </div>
+          </article>
+
+          <article class="work-card reveal delay-2" style="--proj:#c5ff3e">
+            <div class="work-thumb"><span class="work-monogram">KA</span><span class="work-url" data-i18n="work.p3.url">kupulart · 5 propuestas</span></div>
+            <div class="work-body">
+              <span class="work-kicker" data-i18n="work.p3.k">Exploración de identidad · 5 versiones</span>
+              <h3 data-i18n="work.p3.t">KupulArt — Geodomos</h3>
+              <p data-i18n="work.p3.p">Cinco propuestas de web para un estudio de geodomos, desde editorial sobrio hasta SaaS oscuro. Las mismas fotos, cinco mundos visuales distintos.</p>
+              <div class="work-tags"><span class="work-tag">Art direction</span><span class="work-tag">Mockups</span><span class="work-tag">Tipografía</span></div>
+            </div>
+          </article>
+
+          <article class="work-card reveal" style="--proj:#ff2d78">
+            <div class="work-thumb"><span class="work-monogram">VB</span><span class="work-url" data-i18n="work.p4.url">vibronautica</span></div>
+            <div class="work-body">
+              <span class="work-kicker" data-i18n="work.p4.k">Web cultural · 3 direcciones</span>
+              <h3 data-i18n="work.p4.t">Vibronáutica</h3>
+              <p data-i18n="work.p4.p">Tres maquetas-gancho para un proyecto de música y eventos, con la identidad sacada de su Instagram: cosmos inmersivo, póster editorial y brutalismo mono.</p>
+              <div class="work-tags"><span class="work-tag">Música</span><span class="work-tag">Eventos</span><span class="work-tag">Concept</span></div>
+            </div>
+          </article>
+
+          <article class="work-card reveal delay-1" style="--proj:#a3573a">
+            <div class="work-thumb"><span class="work-monogram">II</span><span class="work-url" data-i18n="work.p5.url">institut-integratiu.com</span></div>
+            <div class="work-body">
+              <span class="work-kicker" data-i18n="work.p5.k">Rediseño UX · Portada</span>
+              <h3 data-i18n="work.p5.t">Institut Integratiu</h3>
+              <p data-i18n="work.p5.p">Rediseño de portada para un instituto de formación Gestalt. Reordena todo el contenido y los enlaces existentes con coherencia, sin perder nada.</p>
+              <div class="work-tags"><span class="work-tag">UX</span><span class="work-tag">Educación</span><span class="work-tag">Arquitectura info</span></div>
+            </div>
+          </article>
+
+          <article class="work-card reveal delay-2" style="--proj:#c8a45d">
+            <div class="work-thumb"><span class="work-monogram">CB</span><span class="work-url" data-i18n="work.p6.url">el sendero de mi alma</span></div>
+            <div class="work-body">
+              <span class="work-kicker" data-i18n="work.p6.k">Marca personal</span>
+              <h3 data-i18n="work.p6.t">Cristina BZ</h3>
+              <p data-i18n="work.p6.p">Web para una terapeuta: tarot, astrología y acompañamiento. Paleta cálida, ritmo editorial y newsletter integrada para sostener la comunidad.</p>
+              <div class="work-tags"><span class="work-tag">Marca personal</span><span class="work-tag">Landing</span><span class="work-tag">Newsletter</span></div>
+            </div>
+          </article>
+
+          <article class="work-card reveal delay-3" style="--proj:#22d3a0">
+            <div class="work-thumb"><span class="work-monogram">Z3</span><span class="work-url" data-i18n="work.p7.url">zome · visor 3D</span></div>
+            <div class="work-body">
+              <span class="work-kicker" data-i18n="work.p7.k">Visualizador 3D · Three.js</span>
+              <h3 data-i18n="work.p7.t">Estructuras Zome</h3>
+              <p data-i18n="work.p7.p">Visualizador 3D y despiece de estructuras zome en madera (tipo Good Karma): vista de listones, variante pinwheel y planos de corte exportables. El hermano técnico de DomesLab.</p>
+              <div class="work-tags"><span class="work-tag">Three.js</span><span class="work-tag">Paramétrico</span><span class="work-tag">Despiece</span></div>
+            </div>
+          </article>
+
+        </div>
+        <p class="work-note reveal"><span data-i18n="work.note">Proyectos de cliente y prototipos. Puedo enseñarte cualquiera en una llamada.</span></p>
       </section>
 
       <section id="services" class="container">
@@ -609,10 +771,10 @@
           <p data-i18n="why.lead">Trabajo con criterios que casi nadie aplica en proyectos a medida — pero que cambian completamente el resultado final.</p>
         </div>
         <div class="reasons">
-          <div class="reason reveal"><div class="reason-num">01</div><div><h3 data-i18n="why.r1.t">Tipado estricto y tests desde el día uno</h3><p data-i18n="why.r1.p">TypeScript en modo strict con noUncheckedIndexedAccess, tests unitarios para toda la lógica de negocio y e2e con Playwright. Cero any, cero sorpresas en producción.</p></div></div>
-          <div class="reason reveal delay-1"><div class="reason-num">02</div><div><h3 data-i18n="why.r2.t">Arquitectura limpia, no acoplada al framework</h3><p data-i18n="why.r2.p">El núcleo de cálculo y dominio vive separado de la UI. Si mañana cambia React por otra cosa, tu lógica de negocio sigue funcionando intacta.</p></div></div>
-          <div class="reason reveal delay-2"><div class="reason-num">03</div><div><h3 data-i18n="why.r3.t">Entrega continua y auditable</h3><p data-i18n="why.r3.p">GitHub Actions con lint, typecheck y tests en cada PR. Despliegue automático en cada push a main. Cada cambio queda registrado y reversible.</p></div></div>
-          <div class="reason reveal delay-3"><div class="reason-num">04</div><div><h3 data-i18n="why.r4.t">Comunicación directa, sin agencias</h3><p data-i18n="why.r4.p">Hablas conmigo, no con un comercial. Documentación viva, demos semanales y decisiones técnicas explicadas en lenguaje de negocio.</p></div></div>
+          <div class="reason reveal"><div class="reason-num">01</div><div><h3 data-i18n="why.r1.t">Hablo con quien va a usar la herramienta</h3><p data-i18n="why.r1.p">Antes de escribir código contacto con los usuarios reales para entender su forma de trabajar y qué les frena. Así nació el corte axial Good Karma Pro de DomesLab: de una conversación, no de una suposición.</p></div></div>
+          <div class="reason reveal delay-1"><div class="reason-num">02</div><div><h3 data-i18n="why.r2.t">Tipado estricto y tests desde el día uno</h3><p data-i18n="why.r2.p">TypeScript en modo strict con noUncheckedIndexedAccess, tests para la lógica de negocio y e2e con Playwright. Cero any, cero sorpresas en producción.</p></div></div>
+          <div class="reason reveal delay-2"><div class="reason-num">03</div><div><h3 data-i18n="why.r3.t">Arquitectura limpia, no acoplada al framework</h3><p data-i18n="why.r3.p">El núcleo de cálculo y dominio vive separado de la UI. Si mañana cambia React por otra cosa, tu lógica de negocio sigue funcionando intacta.</p></div></div>
+          <div class="reason reveal delay-3"><div class="reason-num">04</div><div><h3 data-i18n="why.r4.t">Entrega continua y auditable</h3><p data-i18n="why.r4.p">GitHub Actions con lint, typecheck y tests en cada PR. Despliegue automático en cada push a main. Cada cambio queda registrado y reversible.</p></div></div>
         </div>
       </section>
 
@@ -621,13 +783,15 @@
         <h2 class="reveal delay-1"><span data-i18n="contact.title.a">¿Tienes un problema técnico</span> <em data-i18n="contact.title.b">que merece una herramienta a medida?</em></h2>
         <p class="reveal delay-2" data-i18n="contact.lead">Cuéntame qué necesita tu equipo o tus clientes. En menos de 48 horas te respondo con un primer diagnóstico, una estimación de alcance y la siguiente decisión a tomar.</p>
         <div class="contact-actions reveal delay-3">
-          <a href="mailto:lasaifusta@gmail.com?subject=Proyecto%20web%20a%20medida&body=Hola%20Eneko%2C%0A%0AMe%20gustar%C3%ADa%20contarte%20sobre%20un%20proyecto..." class="cta" data-i18n="contact.cta1">
+          <a href="mailto:enekonvrt@gmail.com?subject=Proyecto%20web%20a%20medida&body=Hola%20Eneko%2C%0A%0AMe%20gustar%C3%ADa%20contarte%20sobre%20un%20proyecto..." class="cta" data-i18n="contact.cta1">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
             <span>Enviar email</span>
           </a>
           <a href="#case" class="cta-ghost" data-i18n="contact.cta2">Ver caso de estudio</a>
         </div>
-        <div class="contact-email reveal delay-4"><span data-i18n="contact.email">o escríbeme directamente a</span> <a href="mailto:lasaifusta@gmail.com">lasaifusta@gmail.com</a></div>
+        <div class="contact-email reveal delay-4"><span data-i18n="contact.email">o escríbeme directamente a</span> <a href="mailto:enekonvrt@gmail.com">enekonvrt@gmail.com</a></div>
+        <div class="contact-email reveal delay-4" style="margin-top:6px;"><span data-i18n="contact.phone">o llámame al</span> <a href="tel:+34617575495">+34 617 575 495</a></div>
+        <div class="contact-email reveal delay-4" style="margin-top:6px;"><span data-i18n="contact.github">o mira mi código en</span> <a href="https://github.com/lasaifusta" target="_blank" rel="noopener">github.com/lasaifusta</a></div>
       </section>
     </main>
 
@@ -647,19 +811,22 @@
           "hero.title.a": "Aplicaciones web", "hero.title.b": "técnicas a medida", "hero.title.c": "que tu negocio puede usar mañana.",
           "hero.sub": "Construyo calculadoras, configuradores y visualizadores 3D para empresas que necesitan algo más que una web bonita: lógica real, cálculo riguroso, exportaciones útiles y una interfaz en la que da gusto trabajar.",
           "hero.cta1": "Empieza tu proyecto", "hero.cta2": "Ver caso de estudio",
-          "hero.stat1": "producto en producción", "hero.stat2": "código tipado y testeado", "hero.stat3": "visualización en tiempo real", "hero.stat4": "instalable y offline",
+          "hero.stat1": "en producción, con pagos Stripe", "hero.stat2": "configurador en tiempo real", "hero.stat3": "instalable y offline", "hero.stat4": "tipado estricto y con tests",
           "about.eyebrow": "Sobre mí", "about.title": "Ingeniería de software aplicada a problemas reales de negocio.",
           "about.lead": "No hago plantillas ni landings genéricas. Diseño y construyo aplicaciones web donde la lógica importa: cálculos correctos, datos persistentes, exportaciones que un cliente final puede llevarse al taller o a la oficina.",
           "about.badge": "Disponible para nuevos proyectos",
           "about.meta.k1": "Base", "about.meta.v1": "España · remoto", "about.meta.k2": "Foco", "about.meta.v2": "Web técnica a medida", "about.meta.k3": "Idiomas", "about.meta.v3": "ES · CA · EN", "about.meta.k4": "Respuesta", "about.meta.v4": "< 48 h",
           "about.p1": "Soy Eneko Navarrete. Diseño y construyo aplicaciones web a medida para clientes que tienen un problema técnico concreto y necesitan una herramienta hecha para su caso — no un SaaS genérico que solo cubre el 60%. Mi enfoque combina ingeniería rigurosa (TypeScript estricto, tests, CI/CD), una UX cuidada y entregas rápidas en iteraciones cortas.",
           "about.p2": "Cada proyecto se trata como software de producto: documentación viva, tests automatizados, despliegue continuo y un código que el cliente puede auditar o ampliar más adelante. Trabajo de cerca, sin agencias por medio, y la siguiente decisión técnica siempre queda explicada en lenguaje de negocio.",
+          "about.p3": "Aprendo rápido y no le tengo miedo a las herramientas nuevas: lo que ayer no sabía hacer, esta semana ya está en producción.",
           "about.stack.title": "Stack y especialidades", "about.stack.lead": "Herramientas que uso a diario para entregar producto, no demos.",
-          "case.eyebrow": "Caso de estudio principal", "case.title": "Domitos — Calculadora de domos geodésicos",
+          "case.eyebrow": "Caso de estudio principal", "case.title": "DomesLab — Calculadora de domos geodésicos",
           "case.lead": "Un configurador-calculadora web completo para diseñar, presupuestar y construir domos geodésicos. Sustituye una hoja de cálculo legacy y una sesión de CAD por un flujo en el navegador, con 3D en tiempo real, planos PDF y BOM exportable.",
           "case.tag": "PROYECTO INSIGNIA · 2025–2026", "case.h2": "De hoja de cálculo legacy a SaaS productivo.",
-          "case.p1": "Domitos parte del prototipo Acidome (HTML autocontenido) y lo convierte en una aplicación moderna construida con Vite, React 18, TypeScript estricto y react-three-fiber. El motor matemático vive en código puro y testeado: icosaedros, octaedros y tetraedros con subdivisión geodésica V1 a V6, proyección a esfera y cortes por porción (1/4, 5/12, 7/12, 3/4).",
+          "case.p1": "DomesLab parte del prototipo Acidome (HTML autocontenido) y lo convierte en una aplicación moderna construida con Vite, React 18, TypeScript estricto y react-three-fiber. El motor matemático vive en código puro y testeado: icosaedros, octaedros y tetraedros con subdivisión geodésica V1 a V6, proyección a esfera y cortes por porción (1/4, 5/12, 7/12, 3/4).",
           "case.p2": "La aplicación calcula la lista de barras clasificadas por longitud con tolerancia ±0.5 mm, los ángulos de corte compuestos para conexiones Good Karma, la cubierta en m², los herrajes y el coste total — todo recalculado en menos de 200 ms mientras el usuario manipula la escena 3D.",
+          "case.p3": "Funciones como el corte axial Good Karma Pro — que la conexión Good Karma estándar no resolvía — salieron de hablar con constructores reales y ver dónde se atascaban. El criterio de diseño: enseñar lo que hay que decidir y esconder la matemática que no necesitan.",
+          "case.demo": "Ver demo en vivo",
           "case.prob.title": "El problema",
           "case.prob.1": "Hojas de cálculo frágiles donde un error rompe todos los presupuestos.", "case.prob.2": "Sin previsualización 3D: imposible enseñar el resultado al cliente.", "case.prob.3": "Cortes y biseles calculados a mano, propensos a fallo.", "case.prob.4": "Sin reutilización de plantillas entre proyectos.",
           "case.sol.title": "La solución",
@@ -672,8 +839,8 @@
           "case.feat4.t": "Planos PDF + BOM", "case.feat4.p": "Plano de despiece con bin-packing 1D, BOM editable con precios y exportación XLSX en 4 hojas.",
           "case.feat5.t": "Plantillas listas", "case.feat5.p": "Glamping, invernadero, evento, mini-domo. Punto de partida en un clic.",
           "case.feat6.t": "SaaS multiusuario", "case.feat6.p": "Cuentas, proyectos persistidos, 4 tramos de suscripción y pago con Stripe.",
-          "gallery.eyebrow": "Domitos · capturas reales", "gallery.title": "La app por dentro: 3D, BOM, despiece y diagrama de corte.",
-          "gallery.lead": "No son mockups: son pantallas reales de Domitos en funcionamiento. Cada exportación está pensada para que el resultado pueda llevarse al taller sin pasar antes por un CAD.",
+          "gallery.eyebrow": "DomesLab · capturas reales", "gallery.title": "La app por dentro: 3D, BOM, despiece y diagrama de corte.",
+          "gallery.lead": "No son mockups: son pantallas reales de DomesLab en funcionamiento. Cada exportación está pensada para que el resultado pueda llevarse al taller sin pasar antes por un CAD.",
           "gallery.s1": "Editor 3D · clasificación de barras por color", "gallery.s2": "BOM editable + exportación XLSX", "gallery.s3": "Plano de despiece · bin-packing 1D", "gallery.s4": "Diagrama de corte · ángulos compuestos y biseles, listos para sierra ingletadora",
           "services.eyebrow": "Qué puedo hacer por ti", "services.title": "Software técnico que tu equipo y tus clientes van a usar de verdad.",
           "services.lead": "Estos son los productos en los que mejor entrego: lógica densa, datos persistentes, interfaces precisas y entregables que el cliente puede llevarse al mundo físico.",
@@ -691,14 +858,25 @@
           "process.s4.time": "Producción", "process.s4.t": "Lanzamiento y mantenimiento", "process.s4.p": "Despliegue a producción, dominio propio, métricas activas. Después puedes seguir con horas mensuales, evolutivos o llevarte el código y operar solo.", "process.s4.d": "Handover técnico, runbook y métricas conectadas.",
           "why.eyebrow": "Por qué contratarme", "why.title": "No es una landing genérica. Tampoco un proyecto genérico.",
           "why.lead": "Trabajo con criterios que casi nadie aplica en proyectos a medida — pero que cambian completamente el resultado final.",
-          "why.r1.t": "Tipado estricto y tests desde el día uno", "why.r1.p": "TypeScript en modo strict con noUncheckedIndexedAccess, tests unitarios para toda la lógica de negocio y e2e con Playwright. Cero any, cero sorpresas en producción.",
-          "why.r2.t": "Arquitectura limpia, no acoplada al framework", "why.r2.p": "El núcleo de cálculo y dominio vive separado de la UI. Si mañana cambia React por otra cosa, tu lógica de negocio sigue funcionando intacta.",
-          "why.r3.t": "Entrega continua y auditable", "why.r3.p": "GitHub Actions con lint, typecheck y tests en cada PR. Despliegue automático en cada push a main. Cada cambio queda registrado y reversible.",
-          "why.r4.t": "Comunicación directa, sin agencias", "why.r4.p": "Hablas conmigo, no con un comercial. Documentación viva, demos semanales y decisiones técnicas explicadas en lenguaje de negocio.",
+          "why.r1.t": "Hablo con quien va a usar la herramienta", "why.r1.p": "Antes de escribir código contacto con los usuarios reales para entender su forma de trabajar y qué les frena. Así nació el corte axial Good Karma Pro de DomesLab: de una conversación, no de una suposición.",
+          "why.r2.t": "Tipado estricto y tests desde el día uno", "why.r2.p": "TypeScript en modo strict con noUncheckedIndexedAccess, tests para la lógica de negocio y e2e con Playwright. Cero any, cero sorpresas en producción.",
+          "why.r3.t": "Arquitectura limpia, no acoplada al framework", "why.r3.p": "El núcleo de cálculo y dominio vive separado de la UI. Si mañana cambia React por otra cosa, tu lógica de negocio sigue funcionando intacta.",
+          "why.r4.t": "Entrega continua y auditable", "why.r4.p": "GitHub Actions con lint, typecheck y tests en cada PR. Despliegue automático en cada push a main. Cada cambio queda registrado y reversible.",
           "contact.eyebrow": "Hablemos de tu proyecto", "contact.title.a": "¿Tienes un problema técnico", "contact.title.b": "que merece una herramienta a medida?",
           "contact.lead": "Cuéntame qué necesita tu equipo o tus clientes. En menos de 48 horas te respondo con un primer diagnóstico, una estimación de alcance y la siguiente decisión a tomar.",
-          "contact.cta1": "Enviar email", "contact.cta2": "Ver caso de estudio", "contact.email": "o escríbeme directamente a",
-          "footer.legal": "© 2026 Eneko Navarrete · Desarrollo web técnico desde España."
+          "contact.cta1": "Enviar email", "contact.cta2": "Ver caso de estudio", "contact.email": "o escríbeme directamente a", "contact.phone": "o llámame al", "contact.github": "o mira mi código en",
+          "footer.legal": "© 2026 Eneko Navarrete · Desarrollo web técnico desde España.",
+          "nav.work": "Más trabajo",
+          "work.eyebrow": "Otros proyectos", "work.title": "Más trabajo: webs a medida, rediseños y visualizadores 3D.",
+          "work.lead": "Junto a DomesLab, una selección de proyectos en los que he trabajado: webs para negocios y profesionales, propuestas de rediseño con varias direcciones visuales y herramientas técnicas en 3D. Algunas son entregas reales; otras, exploraciones y propuestas.",
+          "work.p1.k": "Propuesta de rediseño · Catalán", "work.p1.t": "Ajuntament de Castellar del Riu", "work.p1.p": "Propuesta de rediseño para la web de un pueblo del Berguedà: la misma información y las mismas fotos, con una interfaz que respira montaña y se entiende a la primera. Código en mi GitHub.",
+          "work.p2.k": "Propuesta de rediseño · 2 direcciones", "work.p2.t": "Macusa — Maderas Cunill", "work.p2.p": "Propuesta de rediseño para una carpintería industrial con medio siglo de historia. Dos líneas visuales sobre la misma estructura, tipografía editorial y catálogo claro. Código en mi GitHub.",
+          "work.p3.k": "Exploración de identidad · 5 versiones", "work.p3.t": "KupulArt — Geodomos", "work.p3.p": "Cinco propuestas de web para un estudio de geodomos, desde editorial sobrio hasta SaaS oscuro. Las mismas fotos, cinco mundos visuales distintos.",
+          "work.p4.k": "Web cultural · 3 direcciones", "work.p4.t": "Vibronáutica", "work.p4.p": "Tres maquetas-gancho para un proyecto de música y eventos, con la identidad sacada de su Instagram: cosmos inmersivo, póster editorial y brutalismo mono.",
+          "work.p5.k": "Rediseño UX · Portada", "work.p5.t": "Institut Integratiu", "work.p5.p": "Rediseño de portada para un instituto de formación Gestalt. Reordena todo el contenido y los enlaces existentes con coherencia, sin perder nada.",
+          "work.p6.k": "Marca personal", "work.p6.t": "Cristina BZ", "work.p6.p": "Web para una terapeuta: tarot, astrología y acompañamiento. Paleta cálida, ritmo editorial y newsletter integrada para sostener la comunidad.",
+          "work.p7.k": "Visualizador 3D · Three.js", "work.p7.t": "Estructuras Zome", "work.p7.p": "Visualizador 3D y despiece de estructuras zome en madera (tipo Good Karma): vista de listones, variante pinwheel y planos de corte exportables. El hermano técnico de DomesLab.",
+          "work.note": "Proyectos de cliente y prototipos. Puedo enseñarte cualquiera en una llamada."
         },
         ca: {
           "brand.role": "· Desenvolupament web",
@@ -707,19 +885,22 @@
           "hero.title.a": "Aplicacions web", "hero.title.b": "tècniques a mida", "hero.title.c": "que el teu negoci pot fer servir demà.",
           "hero.sub": "Construeixo calculadores, configuradors i visualitzadors 3D per a empreses que necessiten alguna cosa més que una web bonica: lògica real, càlcul rigorós, exportacions útils i una interfície en la qual fa gust treballar.",
           "hero.cta1": "Comença el teu projecte", "hero.cta2": "Veure cas d'estudi",
-          "hero.stat1": "producte en producció", "hero.stat2": "codi tipat i testat", "hero.stat3": "visualització en temps real", "hero.stat4": "instal·lable i offline",
+          "hero.stat1": "en producció, amb pagaments Stripe", "hero.stat2": "configurador en temps real", "hero.stat3": "instal·lable i offline", "hero.stat4": "tipat estricte i amb tests",
           "about.eyebrow": "Sobre mi", "about.title": "Enginyeria de programari aplicada a problemes reals de negoci.",
           "about.lead": "No faig plantilles ni landings genèriques. Disenyo i construeixo aplicacions web on la lògica importa: càlculs correctes, dades persistents, exportacions que un client final pot dur-se al taller o a l'oficina.",
           "about.badge": "Disponible per a nous projectes",
           "about.meta.k1": "Base", "about.meta.v1": "Espanya · remot", "about.meta.k2": "Focus", "about.meta.v2": "Web tècnica a mida", "about.meta.k3": "Idiomes", "about.meta.v3": "ES · CA · EN", "about.meta.k4": "Resposta", "about.meta.v4": "< 48 h",
           "about.p1": "Sóc l'Eneko Navarrete. Disenyo i construeixo aplicacions web a mida per a clients que tenen un problema tècnic concret i necessiten una eina feta per al seu cas — no un SaaS genèric que només cobreix el 60%. El meu enfocament combina enginyeria rigorosa (TypeScript estricte, tests, CI/CD), una UX cuidada i entregues ràpides en iteracions curtes.",
           "about.p2": "Cada projecte es tracta com a programari de producte: documentació viva, tests automatitzats, desplegament continu i un codi que el client pot auditar o ampliar més endavant. Treballo de prop, sense agències pel mig, i la següent decisió tècnica sempre queda explicada en llenguatge de negoci.",
+          "about.p3": "Aprenc ràpid i no tinc por de les eines noves: el que ahir no sabia fer, aquesta setmana ja és en producció.",
           "about.stack.title": "Stack i especialitats", "about.stack.lead": "Eines que faig servir cada dia per entregar producte, no demos.",
-          "case.eyebrow": "Cas d'estudi principal", "case.title": "Domitos — Calculadora de cúpules geodèsiques",
+          "case.eyebrow": "Cas d'estudi principal", "case.title": "DomesLab — Calculadora de cúpules geodèsiques",
           "case.lead": "Un configurador-calculadora web complet per dissenyar, pressupostar i construir cúpules geodèsiques. Substitueix un full de càlcul legacy i una sessió de CAD per un flux al navegador, amb 3D en temps real, plànols PDF i BOM exportable.",
           "case.tag": "PROJECTE INSÍGNIA · 2025–2026", "case.h2": "De full de càlcul legacy a SaaS productiu.",
-          "case.p1": "Domitos parteix del prototip Acidome (HTML autocontingut) i el converteix en una aplicació moderna construïda amb Vite, React 18, TypeScript estricte i react-three-fiber. El motor matemàtic viu en codi pur i testat: icosaedres, octaedres i tetraedres amb subdivisió geodèsica V1 a V6, projecció a esfera i talls per porció (1/4, 5/12, 7/12, 3/4).",
+          "case.p1": "DomesLab parteix del prototip Acidome (HTML autocontingut) i el converteix en una aplicació moderna construïda amb Vite, React 18, TypeScript estricte i react-three-fiber. El motor matemàtic viu en codi pur i testat: icosaedres, octaedres i tetraedres amb subdivisió geodèsica V1 a V6, projecció a esfera i talls per porció (1/4, 5/12, 7/12, 3/4).",
           "case.p2": "L'aplicació calcula la llista de barres classificades per longitud amb tolerància ±0.5 mm, els angles de tall compostos per a connexions Good Karma, la coberta en m², els ferratges i el cost total — tot recalculat en menys de 200 ms mentre l'usuari manipula l'escena 3D.",
+          "case.p3": "Funcions com el tall axial Good Karma Pro — que la connexió Good Karma estàndard no resolia — van sortir de parlar amb constructors reals i veure on s'encallaven. El criteri de disseny: ensenyar el que cal decidir i amagar la matemàtica que no necessiten.",
+          "case.demo": "Veure demo en viu",
           "case.prob.title": "El problema",
           "case.prob.1": "Fulls de càlcul fràgils on un error trenca tots els pressupostos.", "case.prob.2": "Sense previsualització 3D: impossible mostrar el resultat al client.", "case.prob.3": "Talls i biseells calculats a mà, propensos a errors.", "case.prob.4": "Sense reutilització de plantilles entre projectes.",
           "case.sol.title": "La solució",
@@ -732,8 +913,8 @@
           "case.feat4.t": "Plànols PDF + BOM", "case.feat4.p": "Plànol de despeçament amb bin-packing 1D, BOM editable amb preus i exportació XLSX en 4 fulls.",
           "case.feat5.t": "Plantilles llestes", "case.feat5.p": "Glamping, hivernacle, esdeveniment, mini-cúpula. Punt de partida amb un clic.",
           "case.feat6.t": "SaaS multiusuari", "case.feat6.p": "Comptes, projectes persistits, 4 trams de subscripció i pagament amb Stripe.",
-          "gallery.eyebrow": "Domitos · captures reals", "gallery.title": "L'app per dins: 3D, BOM, despeçament i diagrama de tall.",
-          "gallery.lead": "No són mockups: són pantalles reals de Domitos en funcionament. Cada exportació està pensada perquè el resultat es pugui dur al taller sense passar abans per un CAD.",
+          "gallery.eyebrow": "DomesLab · captures reals", "gallery.title": "L'app per dins: 3D, BOM, despeçament i diagrama de tall.",
+          "gallery.lead": "No són mockups: són pantalles reals de DomesLab en funcionament. Cada exportació està pensada perquè el resultat es pugui dur al taller sense passar abans per un CAD.",
           "gallery.s1": "Editor 3D · classificació de barres per color", "gallery.s2": "BOM editable + exportació XLSX", "gallery.s3": "Plànol de despeçament · bin-packing 1D", "gallery.s4": "Diagrama de tall · angles compostos i biseells, llestos per a serra englet",
           "services.eyebrow": "Què puc fer per tu", "services.title": "Programari tècnic que el teu equip i els teus clients faran servir de debò.",
           "services.lead": "Aquests són els productes on millor entrego: lògica densa, dades persistents, interfícies precises i lliurables que el client pot dur-se al món físic.",
@@ -751,14 +932,25 @@
           "process.s4.time": "Producció", "process.s4.t": "Llançament i manteniment", "process.s4.p": "Desplegament a producció, domini propi, mètriques actives. Després pots seguir amb hores mensuals, evolutius o endur-te el codi i operar sol.", "process.s4.d": "Handover tècnic, runbook i mètriques connectades.",
           "why.eyebrow": "Per què contractar-me", "why.title": "No és una landing genèrica. Tampoc un projecte genèric.",
           "why.lead": "Treballo amb criteris que gairebé ningú aplica en projectes a mida — però que canvien completament el resultat final.",
-          "why.r1.t": "Tipat estricte i tests des del primer dia", "why.r1.p": "TypeScript en mode strict amb noUncheckedIndexedAccess, tests unitaris per a tota la lògica de negoci i e2e amb Playwright. Zero any, zero sorpreses a producció.",
-          "why.r2.t": "Arquitectura neta, no acoblada al framework", "why.r2.p": "El nucli de càlcul i domini viu separat de la UI. Si demà canvies React per una altra cosa, la teva lògica de negoci continua funcionant intacta.",
-          "why.r3.t": "Entrega contínua i auditable", "why.r3.p": "GitHub Actions amb lint, typecheck i tests a cada PR. Desplegament automàtic a cada push a main. Cada canvi queda registrat i reversible.",
-          "why.r4.t": "Comunicació directa, sense agències", "why.r4.p": "Parles amb mi, no amb un comercial. Documentació viva, demos setmanals i decisions tècniques explicades en llenguatge de negoci.",
+          "why.r1.t": "Parlo amb qui farà servir l'eina", "why.r1.p": "Abans d'escriure codi contacto amb els usuaris reals per entendre la seva manera de treballar i què els frena. Així va néixer el tall axial Good Karma Pro de DomesLab: d'una conversa, no d'una suposició.",
+          "why.r2.t": "Tipat estricte i tests des del primer dia", "why.r2.p": "TypeScript en mode strict amb noUncheckedIndexedAccess, tests per a la lògica de negoci i e2e amb Playwright. Zero any, zero sorpreses a producció.",
+          "why.r3.t": "Arquitectura neta, no acoblada al framework", "why.r3.p": "El nucli de càlcul i domini viu separat de la UI. Si demà canvies React per una altra cosa, la teva lògica de negoci continua funcionant intacta.",
+          "why.r4.t": "Entrega contínua i auditable", "why.r4.p": "GitHub Actions amb lint, typecheck i tests a cada PR. Desplegament automàtic a cada push a main. Cada canvi queda registrat i reversible.",
           "contact.eyebrow": "Parlem del teu projecte", "contact.title.a": "Tens un problema tècnic", "contact.title.b": "que mereix una eina a mida?",
           "contact.lead": "Explica'm què necessita el teu equip o els teus clients. En menys de 48 hores et responc amb un primer diagnòstic, una estimació d'abast i la següent decisió a prendre.",
-          "contact.cta1": "Enviar correu", "contact.cta2": "Veure cas d'estudi", "contact.email": "o escriu-me directament a",
-          "footer.legal": "© 2026 Eneko Navarrete · Desenvolupament web tècnic des d'Espanya."
+          "contact.cta1": "Enviar correu", "contact.cta2": "Veure cas d'estudi", "contact.email": "o escriu-me directament a", "contact.phone": "o truca'm al", "contact.github": "o mira el meu codi a",
+          "footer.legal": "© 2026 Eneko Navarrete · Desenvolupament web tècnic des d'Espanya.",
+          "nav.work": "Més feina",
+          "work.eyebrow": "Altres projectes", "work.title": "Més feina: webs a mida, redissenys i visualitzadors 3D.",
+          "work.lead": "A més de DomesLab, una selecció de projectes en què he treballat: webs per a negocis i professionals, propostes de redisseny amb diverses direccions visuals i eines tècniques en 3D. Algunes són entregues reals; altres, exploracions i propostes.",
+          "work.p1.k": "Proposta de redisseny · Català", "work.p1.t": "Ajuntament de Castellar del Riu", "work.p1.p": "Proposta de redisseny per al web d'un poble del Berguedà: la mateixa informació i les mateixes fotos, amb una interfície que respira muntanya i s'entén a la primera. Codi al meu GitHub.",
+          "work.p2.k": "Proposta de redisseny · 2 direccions", "work.p2.t": "Macusa — Fustes Cunill", "work.p2.p": "Proposta de redisseny per a una fusteria industrial amb mig segle d'història. Dues línies visuals sobre la mateixa estructura, tipografia editorial i catàleg clar. Codi al meu GitHub.",
+          "work.p3.k": "Exploració d'identitat · 5 versions", "work.p3.t": "KupulArt — Geodomos", "work.p3.p": "Cinc propostes de web per a un estudi de geodomos, des d'editorial sobri fins a SaaS fosc. Les mateixes fotos, cinc mons visuals diferents.",
+          "work.p4.k": "Web cultural · 3 direccions", "work.p4.t": "Vibronáutica", "work.p4.p": "Tres maquetes-ganxo per a un projecte de música i esdeveniments, amb la identitat treta del seu Instagram: cosmos immersiu, pòster editorial i brutalisme mono.",
+          "work.p5.k": "Redisseny UX · Portada", "work.p5.t": "Institut Integratiu", "work.p5.p": "Redisseny de portada per a un institut de formació Gestalt. Reordena tot el contingut i els enllaços existents amb coherència, sense perdre res.",
+          "work.p6.k": "Marca personal", "work.p6.t": "Cristina BZ", "work.p6.p": "Web per a una terapeuta: tarot, astrologia i acompanyament. Paleta càlida, ritme editorial i newsletter integrada per sostenir la comunitat.",
+          "work.p7.k": "Visualitzador 3D · Three.js", "work.p7.t": "Estructures Zome", "work.p7.p": "Visualitzador 3D i desglossament d'estructures zome de fusta (tipus Good Karma): vista de llistons, variant pinwheel i plànols de tall exportables. El germà tècnic de DomesLab.",
+          "work.note": "Projectes de client i prototips. Te'n puc ensenyar qualsevol en una trucada."
         },
         en: {
           "brand.role": "· Web development",
@@ -767,19 +959,22 @@
           "hero.title.a": "Bespoke", "hero.title.b": "technical web apps", "hero.title.c": "your business can use tomorrow.",
           "hero.sub": "I build calculators, configurators and 3D visualizers for companies that need more than a pretty website: real logic, rigorous math, useful exports and an interface that's a joy to work with.",
           "hero.cta1": "Start your project", "hero.cta2": "See case study",
-          "hero.stat1": "product live in production", "hero.stat2": "typed and tested code", "hero.stat3": "real-time visualization", "hero.stat4": "installable, offline-ready",
+          "hero.stat1": "in production, with Stripe payments", "hero.stat2": "real-time configurator", "hero.stat3": "installable, offline-ready", "hero.stat4": "strict typing, with tests",
           "about.eyebrow": "About", "about.title": "Software engineering applied to real business problems.",
           "about.lead": "I don't ship templates or generic landings. I design and build web apps where the logic matters: correct calculations, persistent data, exports your client can take to the workshop or office.",
           "about.badge": "Available for new projects",
           "about.meta.k1": "Based in", "about.meta.v1": "Spain · remote", "about.meta.k2": "Focus", "about.meta.v2": "Bespoke technical web", "about.meta.k3": "Languages", "about.meta.v3": "ES · CA · EN", "about.meta.k4": "Reply", "about.meta.v4": "< 48 h",
           "about.p1": "I'm Eneko Navarrete. I design and build bespoke web apps for clients with a concrete technical problem who need a tool built for their case — not a generic SaaS that only covers 60%. My approach combines rigorous engineering (strict TypeScript, tests, CI/CD), careful UX and fast delivery in short iterations.",
           "about.p2": "Every project is treated as product software: living documentation, automated tests, continuous deployment, and code the client can audit or extend later. I work closely, with no agency in between, and every technical decision is explained in business language.",
+          "about.p3": "I learn fast and I'm not afraid of new tools: what I didn't know how to do yesterday is in production this week.",
           "about.stack.title": "Stack and specialties", "about.stack.lead": "Tools I use daily to deliver product, not demos.",
-          "case.eyebrow": "Featured case study", "case.title": "Domitos — Geodesic dome calculator",
+          "case.eyebrow": "Featured case study", "case.title": "DomesLab — Geodesic dome calculator",
           "case.lead": "A complete configurator-calculator web app to design, quote and build geodesic domes. Replaces a legacy spreadsheet and a CAD session with a browser flow, real-time 3D, PDF blueprints and an exportable BOM.",
           "case.tag": "FLAGSHIP PROJECT · 2025–2026", "case.h2": "From legacy spreadsheet to production-grade SaaS.",
-          "case.p1": "Domitos started from the Acidome prototype (a self-contained HTML) and turned it into a modern app built with Vite, React 18, strict TypeScript and react-three-fiber. The math engine lives in pure, tested code: icosahedra, octahedra and tetrahedra with geodesic subdivision V1 through V6, sphere projection and slicing by portion (1/4, 5/12, 7/12, 3/4).",
+          "case.p1": "DomesLab started from the Acidome prototype (a self-contained HTML) and turned it into a modern app built with Vite, React 18, strict TypeScript and react-three-fiber. The math engine lives in pure, tested code: icosahedra, octahedra and tetrahedra with geodesic subdivision V1 through V6, sphere projection and slicing by portion (1/4, 5/12, 7/12, 3/4).",
           "case.p2": "The app computes the list of beams classified by length within ±0.5 mm tolerance, compound cut angles for Good Karma connections, the cover surface in m², hardware and total cost — all recomputed in under 200 ms while the user manipulates the 3D scene.",
+          "case.p3": "Features like the Good Karma Pro axial cut — which the standard Good Karma connection didn't solve — came from talking to real builders and seeing where they got stuck. The design principle: show what needs deciding and hide the math they don't need.",
+          "case.demo": "See live demo",
           "case.prob.title": "The problem",
           "case.prob.1": "Fragile spreadsheets where one error breaks every quote.", "case.prob.2": "No 3D preview: impossible to show the result to the client.", "case.prob.3": "Cuts and bevels calculated by hand, error-prone.", "case.prob.4": "No template reuse across projects.",
           "case.sol.title": "The solution",
@@ -792,8 +987,8 @@
           "case.feat4.t": "PDF blueprints + BOM", "case.feat4.p": "Cut plan with 1D bin-packing, editable BOM with prices and XLSX export in 4 sheets.",
           "case.feat5.t": "Ready-made templates", "case.feat5.p": "Glamping, greenhouse, event, mini-dome. A starting point in one click.",
           "case.feat6.t": "Multi-tenant SaaS", "case.feat6.p": "Accounts, persisted projects, 4 subscription tiers and Stripe checkout.",
-          "gallery.eyebrow": "Domitos · real screenshots", "gallery.title": "Inside the app: 3D, BOM, cut plan and cut diagram.",
-          "gallery.lead": "Not mockups: actual screens from Domitos running. Every export is designed so the output can go straight to the workshop without a CAD step in between.",
+          "gallery.eyebrow": "DomesLab · real screenshots", "gallery.title": "Inside the app: 3D, BOM, cut plan and cut diagram.",
+          "gallery.lead": "Not mockups: actual screens from DomesLab running. Every export is designed so the output can go straight to the workshop without a CAD step in between.",
           "gallery.s1": "3D editor · beams classified by color", "gallery.s2": "Editable BOM + XLSX export", "gallery.s3": "Cut plan · 1D bin-packing", "gallery.s4": "Cut diagram · compound angles and bevels, ready for the miter saw",
           "services.eyebrow": "What I can do for you", "services.title": "Technical software your team and clients will actually use.",
           "services.lead": "These are the products I deliver best: dense logic, persistent data, precise interfaces and outputs your client can take to the physical world.",
@@ -811,14 +1006,25 @@
           "process.s4.time": "Production", "process.s4.t": "Launch and maintenance", "process.s4.p": "Production deploy, custom domain, live metrics. After that you can continue with monthly hours, evolutions, or take the code and run it yourself.", "process.s4.d": "Technical handover, runbook, and connected metrics.",
           "why.eyebrow": "Why hire me", "why.title": "Not a generic landing. Not a generic project.",
           "why.lead": "I apply standards almost no one applies to bespoke projects — but they completely change the final result.",
-          "why.r1.t": "Strict typing and tests from day one", "why.r1.p": "TypeScript in strict mode with noUncheckedIndexedAccess, unit tests for all business logic and Playwright e2e. Zero any, zero production surprises.",
-          "why.r2.t": "Clean architecture, framework-agnostic", "why.r2.p": "The math and domain core lives separated from the UI. If you swap React tomorrow, your business logic keeps working untouched.",
-          "why.r3.t": "Continuous, auditable delivery", "why.r3.p": "GitHub Actions with lint, typecheck and tests on every PR. Automatic deploy on every push to main. Every change is logged and reversible.",
-          "why.r4.t": "Direct communication, no agencies", "why.r4.p": "You talk to me, not a salesperson. Living documentation, weekly demos and technical decisions explained in business language.",
+          "why.r1.t": "I talk to whoever will use the tool", "why.r1.p": "Before writing code I reach out to real users to understand how they work and what slows them down. That's how DomesLab's Good Karma Pro axial cut came to be: from a conversation, not an assumption.",
+          "why.r2.t": "Strict typing and tests from day one", "why.r2.p": "TypeScript in strict mode with noUncheckedIndexedAccess, tests for business logic and Playwright e2e. Zero any, zero production surprises.",
+          "why.r3.t": "Clean architecture, framework-agnostic", "why.r3.p": "The math and domain core lives separated from the UI. If you swap React tomorrow, your business logic keeps working untouched.",
+          "why.r4.t": "Continuous, auditable delivery", "why.r4.p": "GitHub Actions with lint, typecheck and tests on every PR. Automatic deploy on every push to main. Every change is logged and reversible.",
           "contact.eyebrow": "Let's talk about your project", "contact.title.a": "Got a technical problem", "contact.title.b": "that deserves a bespoke tool?",
           "contact.lead": "Tell me what your team or clients need. In under 48 hours I'll get back to you with a first diagnosis, a scope estimate and the next decision to make.",
-          "contact.cta1": "Send email", "contact.cta2": "See case study", "contact.email": "or write to me directly at",
-          "footer.legal": "© 2026 Eneko Navarrete · Technical web development from Spain."
+          "contact.cta1": "Send email", "contact.cta2": "See case study", "contact.email": "or write to me directly at", "contact.phone": "or call me at", "contact.github": "or check my code on",
+          "footer.legal": "© 2026 Eneko Navarrete · Technical web development from Spain.",
+          "nav.work": "More work",
+          "work.eyebrow": "Other projects", "work.title": "More work: bespoke websites, redesigns and 3D viewers.",
+          "work.lead": "Beyond DomesLab, a selection of projects I've worked on: websites for businesses and professionals, redesign proposals with several visual directions, and technical tools in 3D. Some are real deliveries; others, explorations and proposals.",
+          "work.p1.k": "Redesign proposal · Catalan", "work.p1.t": "Castellar del Riu Town Council", "work.p1.p": "Redesign proposal for a small mountain town's website: the same information and photos, with an interface that breathes the mountains and reads at a glance. Code on my GitHub.",
+          "work.p2.k": "Redesign proposal · 2 directions", "work.p2.t": "Macusa — Cunill Woodworks", "work.p2.p": "Redesign proposal for an industrial joinery with half a century of history. Two visual lines over the same structure, editorial type and a clear catalogue. Code on my GitHub.",
+          "work.p3.k": "Identity exploration · 5 versions", "work.p3.t": "KupulArt — Geodesic domes", "work.p3.p": "Five website proposals for a geodesic-dome studio, from restrained editorial to dark SaaS. The same photos, five distinct visual worlds.",
+          "work.p4.k": "Cultural website · 3 directions", "work.p4.t": "Vibronáutica", "work.p4.p": "Three hook mockups for a music and events project, with the identity pulled from their Instagram: immersive cosmos, editorial poster and mono brutalism.",
+          "work.p5.k": "UX redesign · Homepage", "work.p5.t": "Institut Integratiu", "work.p5.p": "Homepage redesign for a Gestalt training institute. Reorders all existing content and links coherently, without losing anything.",
+          "work.p6.k": "Personal brand", "work.p6.t": "Cristina BZ", "work.p6.p": "Website for a therapist: tarot, astrology and guidance. Warm palette, editorial rhythm and an integrated newsletter to hold the community.",
+          "work.p7.k": "3D viewer · Three.js", "work.p7.t": "Zome structures", "work.p7.p": "3D viewer and cut list for wooden zome structures (Good Karma type): beam view, pinwheel variant and exportable cut plans. DomesLab's technical sibling.",
+          "work.note": "Client projects and prototypes. I can walk you through any of them on a call."
         }
       };
 
